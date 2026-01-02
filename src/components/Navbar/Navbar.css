@@ -21,11 +21,23 @@
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
+    color: var(--color-white);
+    text-decoration: none;
 }
 
 .menu-toggle {
     cursor: pointer;
     z-index: 101;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.menu-toggle:hover {
+    transform: scale(1.1);
 }
 
 .menu-overlay {
@@ -34,33 +46,162 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: var(--color-dark-charcoal);
+    background-color: #000000;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('../../assets/hero_bg_night.png');
+    background-size: cover;
+    background-position: center;
     z-index: 99;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     clip-path: circle(0% at 100% 0);
-    /* Initial state hidden */
+    padding: 8rem 4rem 4rem;
+}
+
+.menu-container {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4rem;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.menu-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .menu-links {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 1.5rem;
+}
+
+.menu-link-wrapper {
+    display: flex;
+    align-items: baseline;
     gap: 2rem;
+    overflow: hidden;
+}
+
+.menu-index {
+    font-family: var(--font-main);
+    font-size: 1rem;
+    color: var(--color-stone-grey);
+    font-weight: 400;
+    letter-spacing: 2px;
 }
 
 .menu-link {
     font-family: var(--font-heading);
-    font-size: 4rem;
-    color: var(--color-off-white);
+    font-size: clamp(3rem, 6vw, 6rem);
+    color: var(--color-white);
     text-transform: uppercase;
     font-weight: 300;
-    transition: color 0.3s ease;
+    text-decoration: none;
+    line-height: 1;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.menu-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-sand-beige);
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .menu-link:hover {
+    color: var(--color-sand-beige);
+    transform: translateX(20px);
+}
+
+.menu-link:hover::after {
+    width: 100%;
+}
+
+.menu-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 4rem;
+}
+
+.menu-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.info-section h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
     color: var(--color-stone-grey);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+.info-section p,
+.social-links a {
+    font-size: 1rem;
+    color: var(--color-light-ash);
+    font-weight: 300;
+    line-height: 1.6;
+    text-decoration: none;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.social-links a:hover {
+    color: var(--color-white);
+}
+
+.menu-footer {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu-footer p {
+    font-size: 0.8rem;
+    color: var(--color-stone-grey);
+    letter-spacing: 1px;
+}
+
+@media (max-width: 1024px) {
+    .menu-container {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+    }
+
+    .menu-right {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 4rem;
+    }
+
+    .menu-link {
+        font-size: 4rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -68,7 +209,15 @@
         padding: 1.5rem 2rem;
     }
 
+    .menu-overlay {
+        padding: 6rem 2rem 2rem;
+    }
+
     .menu-link {
-        font-size: 2.5rem;
+        font-size: 3rem;
+    }
+
+    .menu-info {
+        gap: 2rem;
     }
 }
