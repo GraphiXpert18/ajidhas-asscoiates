@@ -1,0 +1,13 @@
+.layout-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    /* Important for Lenis */
+}
+
+.main-content {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+}

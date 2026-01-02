@@ -1,0 +1,299 @@
+.art-landing-page-new {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Cover Slide */
+.cover-slide {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.cover-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: kenBurns 20s ease-in-out infinite alternate;
+}
+
+@keyframes kenBurns {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+.cover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+            rgba(0, 0, 0, 0.85) 0%,
+            rgba(31, 31, 30, 0.7) 50%,
+            rgba(0, 0, 0, 0.85) 100%);
+}
+
+.cover-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    color: var(--color-white);
+}
+
+/* Header Section */
+.cover-header {
+    text-align: center;
+}
+
+.cover-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--color-stone-grey);
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+}
+
+.cover-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+}
+
+.cover-subtitle {
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    color: var(--color-light-ash);
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+/* Featured Work */
+.featured-work {
+    text-align: center;
+    padding: 1.5rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.work-badge {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+
+.work-title {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.work-meta {
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    color: var(--color-stone-grey);
+    font-weight: 300;
+}
+
+/* Action Buttons */
+.cover-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cover-btn {
+    position: relative;
+    padding: 1rem 2.5rem;
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: none;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.cover-btn.primary {
+    background: var(--color-white);
+    color: var(--color-black);
+}
+
+.cover-btn.primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--color-black);
+    transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
+}
+
+.cover-btn.primary:hover::before {
+    left: 0;
+}
+
+.cover-btn.primary:hover {
+    color: var(--color-white);
+}
+
+.cover-btn.secondary {
+    background: transparent;
+    color: var(--color-white);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.cover-btn.secondary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
+}
+
+.cover-btn.secondary:hover::before {
+    left: 0;
+}
+
+.cover-btn.secondary:hover {
+    border-color: var(--color-white);
+}
+
+.cover-btn span,
+.cover-btn svg {
+    position: relative;
+    z-index: 1;
+}
+
+.cover-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.cover-btn:hover svg {
+    transform: translateX(5px);
+}
+
+/* Slide Progress */
+.slide-progress {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.progress-bar {
+    width: 70px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background: var(--color-white);
+    transition: width 0.3s ease;
+}
+
+.progress-bar.active .progress-fill {
+    animation: fillProgress 4s linear forwards;
+}
+
+.progress-bar.completed .progress-fill {
+    width: 100%;
+}
+
+@keyframes fillProgress {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
+.progress-bar:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cover-content {
+        gap: 1.5rem;
+    }
+
+    .featured-work {
+        padding: 1.2rem 1.5rem;
+    }
+
+    .cover-actions {
+        flex-direction: column;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
+    }
+
+    .cover-btn {
+        width: 100%;
+        padding: 0.9rem 2rem;
+        font-size: 0.8rem;
+    }
+
+    .progress-bar {
+        width: 50px;
+    }
+}

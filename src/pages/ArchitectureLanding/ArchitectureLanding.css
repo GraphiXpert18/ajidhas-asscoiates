@@ -1,0 +1,174 @@
+.arch-landing-page {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.arch-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.arch-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.4);
+}
+
+.arch-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+            rgba(0, 0, 0, 0.7) 0%,
+            rgba(31, 31, 30, 0.85) 100%);
+}
+
+.arch-content {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+}
+
+.arch-header {
+    text-align: center;
+    color: var(--color-white);
+    max-width: 800px;
+}
+
+.arch-header h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 300;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+}
+
+.arch-header p {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--color-light-ash);
+    font-weight: 300;
+}
+
+.arch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    width: 100%;
+}
+
+.arch-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 140px;
+}
+
+.arch-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent);
+    transition: left 0.6s ease;
+}
+
+.arch-card:hover::before {
+    left: 100%;
+}
+
+.arch-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.card-content {
+    color: var(--color-white);
+}
+
+.card-content h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+}
+
+.card-content p {
+    font-size: 0.9rem;
+    color: var(--color-stone-grey);
+    font-weight: 300;
+}
+
+.card-arrow {
+    align-self: flex-end;
+    font-size: 2rem;
+    color: var(--color-white);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.arch-card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(8px);
+}
+
+@media (max-width: 768px) {
+    .arch-content {
+        padding: 3rem 1.5rem;
+        gap: 3rem;
+    }
+
+    .arch-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .arch-card {
+        min-height: 120px;
+        padding: 1.5rem;
+    }
+
+    .card-content h3 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .arch-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1025px) {
+    .arch-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
