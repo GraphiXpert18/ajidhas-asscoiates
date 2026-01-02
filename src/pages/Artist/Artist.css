@@ -1,0 +1,151 @@
+.artist-page {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--color-dark-charcoal);
+    color: var(--color-white);
+    padding: 8rem 0;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.artist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: center;
+}
+
+.artist-image-container {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.artist-profile-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.artist-image-container:hover .artist-profile-img {
+    transform: scale(1.05);
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.4));
+    pointer-events: none;
+}
+
+.artist-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.section-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--color-stone-grey);
+    margin-bottom: 1rem;
+    font-weight: 300;
+}
+
+.section-title {
+    font-size: 3.5rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+    color: var(--color-white);
+}
+
+.artist-name {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--color-sand-beige);
+    margin-bottom: 2.5rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.artist-bio {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-light-ash);
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+.artist-philosophy {
+    font-size: 1.2rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--color-white);
+    border-left: 2px solid var(--color-sand-beige);
+    padding-left: 1.5rem;
+    margin-bottom: 3rem;
+    font-weight: 300;
+}
+
+.artist-stats {
+    display: flex;
+    gap: 4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2.5rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--color-white);
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-stone-grey);
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+    .artist-grid {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+        text-align: center;
+    }
+
+    .artist-image-container {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .artist-philosophy {
+        text-align: left;
+    }
+
+    .artist-stats {
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+    }
+}

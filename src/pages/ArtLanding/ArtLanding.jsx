@@ -12,7 +12,7 @@ const recentWorks = [
     {
         id: 1,
         title: 'Ethereal Silence',
-        artist: 'Elena V.',
+        artist: 'Ajidhas',
         year: '2025',
         medium: 'Mixed Media on Canvas',
         image: art1,
@@ -20,7 +20,7 @@ const recentWorks = [
     {
         id: 2,
         title: 'Bronze Form No. 4',
-        artist: 'Marcus Thorne',
+        artist: 'Ajidhas',
         year: '2024',
         medium: 'Bronze Sculpture',
         image: art2,
@@ -28,7 +28,7 @@ const recentWorks = [
     {
         id: 3,
         title: 'Monolith',
-        artist: 'Sarah Jenkins',
+        artist: 'Ajidhas',
         year: '2025',
         medium: 'Photography',
         image: art3,
