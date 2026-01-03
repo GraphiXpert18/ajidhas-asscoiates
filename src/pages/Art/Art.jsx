@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Art.css';
@@ -46,9 +46,17 @@ const artPieces = [
 
 const Art = () => {
     const containerRef = useRef(null);
-    const bgRef = useRef(null);
+    const [currentBg, setCurrentBg] = useState(artPieces[0].image);
+    const [prevBg, setPrevBg] = useState(null);
+    const [prevFading, setPrevFading] = useState(false);
+    const [currentFading, setCurrentFading] = useState(true);
 
     useEffect(() => {
+        // Preload all background images to avoid flicker/blank while swapping
+        artPieces.forEach(p => {
+            const img = new Image();
+            img.src = p.image;
+        });
         const sections = gsap.utils.toArray('.art-project-section');
 
         sections.forEach((section, i) => {
@@ -74,32 +82,33 @@ const Art = () => {
                 }
             );
 
-            // Animate image parallax/scale
+            // Fade-in image when section enters (remove scroll-driven parallax)
             gsap.fromTo(
                 image,
-                { scale: 1.2 },
+                { opacity: 0, scale: 1.05 },
                 {
+                    opacity: 1,
                     scale: 1,
-                    ease: 'none',
+                    duration: 1,
+                    ease: 'power3.out',
                     scrollTrigger: {
                         trigger: section,
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: true,
+                        start: 'top 70%',
+                        toggleActions: 'play none none reverse',
                     },
                 }
             );
 
-            // Update fixed background image
+            // Update fixed background image using crossfade (avoid blinking)
             ScrollTrigger.create({
                 trigger: section,
                 start: 'top 50%',
                 end: 'bottom 50%',
                 onEnter: () => {
-                    bgRef.current.src = bgImage;
+                    changeBg(bgImage);
                 },
                 onEnterBack: () => {
-                    bgRef.current.src = bgImage;
+                    changeBg(bgImage);
                 },
             });
         });
@@ -109,10 +118,55 @@ const Art = () => {
         };
     }, []);
 
+    const changeBg = (image) => {
+        if (!image || image === currentBg) return;
+
+        // Prevent scroll UI from appearing during the transition
+        document.body.classList.add('bg-transitioning');
+
+        // Preload the incoming image first to avoid blink/flash
+        const incoming = new Image();
+        incoming.src = image;
+        incoming.onload = () => {
+            // set previous so it can fade out above the new one
+            setPrevBg(currentBg);
+            setPrevFading(false);
+
+            // prepare the new current image hidden, then fade it in
+            setCurrentFading(false);
+            setCurrentBg(image);
+
+            // next tick: start both fade-in for current and fade-out for prev
+            setTimeout(() => {
+                setCurrentFading(true);
+                setPrevFading(true);
+            }, 40);
+
+            // cleanup the previous background after the transition completes
+            const cleanupMs = 1000; // should match CSS transition (~900ms)
+            setTimeout(() => {
+                setPrevBg(null);
+                setPrevFading(false);
+                document.body.classList.remove('bg-transitioning');
+            }, cleanupMs);
+        };
+        // In case image fails to load, still remove the transitioning lock after a timeout
+        incoming.onerror = () => {
+            document.body.classList.remove('bg-transitioning');
+        };
+    };
+
     return (
         <div className="art-page" ref={containerRef}>
             <div className="art-background">
-                <img ref={bgRef} src={artPieces[0].image} alt="Background" className="bg-fade" />
+                {prevBg && (
+                    <img
+                        src={prevBg}
+                        alt="Background previous"
+                        className={`bg-image prev ${prevFading ? 'fade-out' : ''}`}
+                    />
+                )}
+                <img src={currentBg} alt="Background" className={`bg-image current ${currentFading ? 'fade-in' : ''}`} />
                 <div className="overlay"></div>
             </div>
 

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
-import { IoMenu, IoClose } from 'react-icons/io5';
+import { IoMenu, IoClose, IoArrowBack } from 'react-icons/io5';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -50,11 +50,26 @@ const Navbar = () => {
         }
     };
 
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        try {
+            navigate(-1);
+        } catch (e) {
+            window.history.back();
+        }
+    };
+
     return (
         <nav className="navbar">
             <div className="navbar-container">
-                <div className="logo">
-                    <Link to="/">Ajidhas and Associates</Link>
+                <div className="left-group">
+                    <button className="back-button" onClick={handleBack} aria-label="Go back">
+                        <IoArrowBack size={20} />
+                    </button>
+                    <div className="logo">
+                        <Link to="/">Ajidhas and Associates</Link>
+                    </div>
                 </div>
                 <div className="menu-toggle" onClick={toggleMenu}>
                     {isOpen ? <IoClose size={30} /> : <IoMenu size={30} />}

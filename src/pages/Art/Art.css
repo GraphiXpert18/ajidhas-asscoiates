@@ -15,12 +15,34 @@
     z-index: 0;
 }
 
-.art-background img.bg-fade {
+.art-background .bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     filter: blur(40px) brightness(0.3);
-    transition: src 1s ease-in-out;
+    transition: opacity 0.9s ease-in-out, filter 0.9s ease-in-out;
+    opacity: 1;
+}
+
+.art-background .bg-image.current {
+    z-index: 1;
+    opacity: 0;
+}
+
+.art-background .bg-image.current.fade-in {
+    opacity: 1;
+}
+
+.art-background .bg-image.prev {
+    z-index: 2;
+    opacity: 1;
+}
+
+.art-background .bg-image.prev.fade-out {
+    opacity: 0;
 }
 
 .art-background .overlay {
@@ -82,6 +104,8 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
+    transition: opacity 0.9s ease, transform 0.9s ease;
 }
 
 .art-details {
