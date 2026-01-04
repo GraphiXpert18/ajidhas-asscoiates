@@ -87,6 +87,7 @@ const ArchitectureLanding = () => {
                     ))}
                 </div>
             </div>
+        
         </div>
     );
 };

@@ -9,6 +9,8 @@ import ArchitectureProjects from './pages/ArchitectureProjects/ArchitectureProje
 import ArchitectureAllWork from './pages/ArchitectureAllWork/ArchitectureAllWork';
 import ArchitectureProjectDetail from './pages/ArchitectureProjectDetail/ArchitectureProjectDetail';
 import Interior from './pages/Interior/Interior';
+import ArchitectureContact from './pages/ArchitectureLanding/ArchitectureContact';
+import ArchitectureInquiry from './pages/ArchitectureLanding/ArchitectureInquiry';
 import Artist from './pages/Artist/Artist';
 import GallerySeries from './pages/GallerySeries/GallerySeries';
 import ProjectDetail from './pages/ProjectDetail/ProjectDetail';
@@ -45,7 +47,9 @@ function App() {
           <Route path="/architecture/collaboration" element={<Collaboration />} />
           <Route path="/architecture/technology" element={<Technology />} />
           <Route path="/architecture/landscape" element={<Landscape />} />
-          <Route path="/architecture/contact" element={<Contact />} /> {/* Add Contact Route */}
+          <Route path="/architecture/contact" element={<Contact />} />
+          <Route path="/architecture/arch-contact" element={<ArchitectureContact />} />
+          <Route path="/architecture/inquiry" element={<ArchitectureInquiry />} />
           {/* Add other routes here */}
         </Routes>
       </Layout>

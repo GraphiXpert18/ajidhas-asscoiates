@@ -39,6 +39,22 @@ body {
   overflow-x: hidden;
 }
 
+/* Hide native vertical scrollbar visually but keep scrolling functional */
+html, body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* While background is transitioning we hide native scrollbars to avoid flicker */
+.bg-transitioning {
+  overflow: hidden !important;
+}
+
 h1,
 h2,
 h3,
