@@ -5,7 +5,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { IoArrowBack } from 'react-icons/io5';
 import './ArchitectureProjects.css';
 
-import buildingNight from '../../assets/building_night.png';
+import arch1 from '../../assets/arch_project_1.png';
+import arch2 from '../../assets/arch_project_2.png';
+import arch3 from '../../assets/villa_solenne.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,7 +20,7 @@ const projects = [
         coords: '41.3851° N, 2.1734° E',
         description: 'a minimalist sanctuary where light dances through geometric volumes. clean lines meet warm materials in perfect harmony',
         designer: 'ANTONI MARTÍNEZ',
-        image: buildingNight
+        image: arch1
     },
     {
         id: 2,
@@ -28,7 +30,7 @@ const projects = [
         coords: '25.2048° N, 55.2708° E',
         description: 'vertical living redefined. floor-to-ceiling glass frames the city below, while sustainable design meets luxury',
         designer: 'FATIMA AL-RASHID',
-        image: buildingNight
+        image: arch2
     },
     {
         id: 3,
@@ -38,7 +40,7 @@ const projects = [
         coords: '35.0116° N, 135.7681° E',
         description: 'traditional japanese aesthetics reimagined. natural wood, stone gardens, and the gentle sound of water',
         designer: 'KENJI TANAKA',
-        image: buildingNight
+        image: arch3
     }
 ];
 
