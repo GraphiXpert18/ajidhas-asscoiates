@@ -1,8 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './Home.css';
-import homeBg from '../../assets/hero_bg_night.png';
+
+import buildingNight from '../../assets/building_night.png';
+
+const backgroundImages = [buildingNight];
 
 const Home = () => {
     const heroRef = useRef(null);
@@ -45,7 +48,11 @@ const Home = () => {
     return (
         <div className="home-page-new">
             <div className="home-background">
-                <img src={homeBg} alt="Background" />
+                <img
+                    src={buildingNight}
+                    alt="Background"
+                    className="bg-slide active"
+                />
                 <div className="home-overlay"></div>
             </div>
 
@@ -53,7 +60,6 @@ const Home = () => {
                 <div className="hero-content-new" ref={textRef}>
                     <h1>Ajidhas and Associates</h1>
                     <p className="hero-subtitle">Architecture & Art Studio</p>
-                    <p className="hero-tagline"></p>
                 </div>
 
                 <div className="hero-buttons" ref={buttonsRef}>

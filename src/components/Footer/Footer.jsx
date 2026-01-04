@@ -9,11 +9,7 @@ const Footer = () => {
             <div className="footer-content">
                 <div className="footer-brand">
                     <h3>Ajidhas & Associates</h3>
-                    <p>
-                        A multidisciplinary studio specializing in architectural design,
-                        interior spaces, and fine art. Creating environments that
-                        inspire and endure.
-                    </p>
+            
                 </div>
 
                 <div className="footer-section">

@@ -1,41 +1,72 @@
 .artist-page {
     width: 100%;
     min-height: 100vh;
-    background: var(--color-dark-charcoal);
-    color: var(--color-white);
-    padding: 8rem 0;
+    background: #0a0a0a;
+    color: #ffffff;
+    padding: clamp(80px, 15vh, 160px) 0;
     overflow-x: hidden;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 clamp(20px, 5vw, 40px);
 }
 
 .artist-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 6rem;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(40px, 10vw, 100px);
     align-items: center;
 }
 
 .artist-image-container {
     position: relative;
-    border-radius: 4px;
+    border-radius: 120px 4px 120px 4px;
+    overflow: visible;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+    aspect-ratio: 4/5;
+    z-index: 1;
+}
+
+.artist-profile-img-wrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
     overflow: hidden;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
 }
 
 .artist-profile-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .artist-image-container:hover .artist-profile-img {
-    transform: scale(1.05);
+    transform: scale(1.08);
+}
+
+.artist-image-container::after {
+    content: '';
+    position: absolute;
+    top: -25px;
+    left: -25px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--color-sand-beige);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0.15;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.artist-image-container:hover::after {
+    top: -15px;
+    left: -15px;
+    opacity: 0.3;
 }
 
 .image-overlay {
@@ -44,8 +75,36 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.4));
+    background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.8));
     pointer-events: none;
+}
+
+.artist-name-overlay {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.overlay-firstname {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    color: var(--color-sand-beige);
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+.overlay-lastname {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 200;
+    letter-spacing: 2px;
+    line-height: 0.9;
+    color: #fff;
+    text-transform: uppercase;
 }
 
 .artist-details {
@@ -54,55 +113,58 @@
 }
 
 .section-label {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 4px;
-    color: var(--color-stone-grey);
-    margin-bottom: 1rem;
+    letter-spacing: 6px;
+    color: var(--color-sand-beige);
+    margin-bottom: 20px;
     font-weight: 300;
+    opacity: 0.6;
 }
 
 .section-title {
-    font-size: 3.5rem;
-    font-weight: 300;
-    margin-bottom: 0.5rem;
-    letter-spacing: -1px;
-    color: var(--color-white);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 200;
+    margin-bottom: 10px;
+    letter-spacing: -2px;
+    line-height: 1;
 }
 
 .artist-name {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 400;
-    color: var(--color-sand-beige);
-    margin-bottom: 2.5rem;
-    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 40px;
+    letter-spacing: 3px;
     text-transform: uppercase;
 }
 
 .artist-bio {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     line-height: 1.8;
-    color: var(--color-light-ash);
-    margin-bottom: 2rem;
+    color: #aaa;
+    margin-bottom: 40px;
     font-weight: 300;
+    max-width: 500px;
 }
 
 .artist-philosophy {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-style: italic;
-    line-height: 1.6;
-    color: var(--color-white);
-    border-left: 2px solid var(--color-sand-beige);
-    padding-left: 1.5rem;
-    margin-bottom: 3rem;
+    line-height: 1.7;
+    color: #fff;
+    border-left: 1px solid var(--color-sand-beige);
+    padding-left: 30px;
+    margin-bottom: 60px;
     font-weight: 300;
+    max-width: 450px;
 }
 
 .artist-stats {
     display: flex;
-    gap: 4rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 2.5rem;
+    gap: 60px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 40px;
 }
 
 .stat-item {
@@ -111,29 +173,37 @@
 }
 
 .stat-number {
-    font-size: 2rem;
-    font-weight: 400;
-    color: var(--color-white);
+    font-size: 2.2rem;
+    font-weight: 200;
+    color: #fff;
+    line-height: 1;
 }
 
 .stat-label {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--color-stone-grey);
-    margin-top: 0.5rem;
+    letter-spacing: 3px;
+    color: #666;
+    margin-top: 10px;
 }
 
 @media (max-width: 1024px) {
     .artist-grid {
         grid-template-columns: 1fr;
-        gap: 4rem;
+        gap: 80px;
         text-align: center;
     }
 
     .artist-image-container {
-        max-width: 500px;
+        max-width: 450px;
         margin: 0 auto;
+    }
+
+    .artist-bio,
+    .artist-philosophy {
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .artist-philosophy {
@@ -142,10 +212,21 @@
 
     .artist-stats {
         justify-content: center;
-        gap: 2rem;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .artist-page {
+        padding: 80px 0;
     }
 
-    .section-title {
-        font-size: 2.5rem;
+    .artist-stats {
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        flex: 1 1 120px;
     }
 }

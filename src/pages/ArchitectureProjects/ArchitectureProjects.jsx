@@ -1,0 +1,118 @@
+import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { IoArrowBack } from 'react-icons/io5';
+import './ArchitectureProjects.css';
+
+import buildingNight from '../../assets/building_night.png';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const projects = [
+    {
+        id: 1,
+        title: 'casa serena',
+        location: 'BARCELONA',
+        year: '2025',
+        coords: '41.3851° N, 2.1734° E',
+        description: 'a minimalist sanctuary where light dances through geometric volumes. clean lines meet warm materials in perfect harmony',
+        designer: 'ANTONI MARTÍNEZ',
+        image: buildingNight
+    },
+    {
+        id: 2,
+        title: 'skyline residence',
+        location: 'DUBAI',
+        year: '2025',
+        coords: '25.2048° N, 55.2708° E',
+        description: 'vertical living redefined. floor-to-ceiling glass frames the city below, while sustainable design meets luxury',
+        designer: 'FATIMA AL-RASHID',
+        image: buildingNight
+    },
+    {
+        id: 3,
+        title: 'forest pavilion',
+        location: 'KYOTO',
+        year: '2024',
+        coords: '35.0116° N, 135.7681° E',
+        description: 'traditional japanese aesthetics reimagined. natural wood, stone gardens, and the gentle sound of water',
+        designer: 'KENJI TANAKA',
+        image: buildingNight
+    }
+];
+
+const ArchitectureProjects = () => {
+    const navigate = useNavigate();
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        const sections = gsap.utils.toArray('.project-editorial-section');
+
+        sections.forEach((section) => {
+            const title = section.querySelector('.editorial-title');
+            const desc = section.querySelector('.editorial-description');
+            const meta = section.querySelectorAll('.editorial-meta-item');
+            const designer = section.querySelector('.editorial-designer');
+            const bgImg = section.querySelector('.editorial-bg img');
+
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            tl.fromTo(bgImg,
+                { scale: 1.2, filter: 'brightness(0)' },
+                { scale: 1, filter: 'brightness(0.6)', duration: 2, ease: 'power2.out' }
+            )
+                .fromTo(title, { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out' }, '-=1.5')
+                .fromTo(desc, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, '-=0.8')
+                .fromTo(meta, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1, stagger: 0.2 }, '-=0.6')
+                .fromTo(designer, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 1 }, '-=0.6');
+        });
+    }, []);
+
+    return (
+        <div className="arch-projects-editorial" ref={containerRef}>
+
+
+            {projects.map((project, index) => (
+                <section key={project.id} className={`project-editorial-section ${index % 2 !== 0 ? 'layout-left' : ''}`}>
+                    <div className="editorial-bg">
+                        <img src={project.image} alt={project.title} />
+                        <div className="editorial-overlay"></div>
+                    </div>
+
+                    <div className="editorial-content">
+                        <div className="editorial-top-left editorial-meta-item">
+                            <p className="coords">{project.coords}</p>
+                        </div>
+
+                        <div className="editorial-top-right editorial-meta-item">
+                            <p className="location-year">{project.location}, {project.year}</p>
+                        </div>
+
+                        <div className="editorial-center-right">
+                            <h2 className="editorial-title">{project.title}</h2>
+                        </div>
+
+                        <div className="editorial-bottom-right">
+                            <p className="editorial-description">{project.description}</p>
+                        </div>
+
+                        <div className="editorial-bottom-left editorial-designer">
+                            <div className="designer-info">
+                                <p>DESIGNED BY {project.designer}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            ))}
+        </div>
+    );
+};
+
+export default ArchitectureProjects;

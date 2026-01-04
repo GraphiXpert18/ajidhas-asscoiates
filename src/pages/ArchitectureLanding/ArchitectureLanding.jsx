@@ -1,8 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './ArchitectureLanding.css';
-import homeBg from '../../assets/hero_bg_night.png';
+
+import bg1 from '../../assets/hero_bg_night.png';
+import bg2 from '../../assets/hero_bg_architecture.png';
+import bg3 from '../../assets/home_bg.png';
+
+const backgroundImages = [bg1, bg2, bg3];
 
 const architectureOptions = [
     { id: 1, title: 'All Work', path: '/architecture/all-work', description: 'Complete portfolio' },
@@ -17,9 +22,17 @@ const architectureOptions = [
 ];
 
 const ArchitectureLanding = () => {
+    const [currentBg, setCurrentBg] = useState(0);
     const navigate = useNavigate();
     const headerRef = useRef(null);
     const gridRef = useRef(null);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         const tl = gsap.timeline();
@@ -41,14 +54,21 @@ const ArchitectureLanding = () => {
     return (
         <div className="arch-landing-page">
             <div className="arch-background">
-                <img src={homeBg} alt="Background" />
+                {backgroundImages.map((img, index) => (
+                    <img
+                        key={index}
+                        src={img}
+                        alt={`Background ${index}`}
+                        className={`arch-bg-slide ${index === currentBg ? 'active' : ''}`}
+                    />
+                ))}
                 <div className="arch-overlay"></div>
             </div>
 
             <div className="arch-content">
                 <div className="arch-header" ref={headerRef}>
                     <h1>Architecture</h1>
-                    <p>Explore our comprehensive architectural services</p>
+                   
                 </div>
 
                 <div className="arch-grid" ref={gridRef}>

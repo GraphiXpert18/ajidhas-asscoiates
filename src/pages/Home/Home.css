@@ -14,11 +14,22 @@
     z-index: -1;
 }
 
-.home-background img {
+.bg-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.8);
+    opacity: 0;
+    transition: opacity 2.5s ease-in-out, transform 12s linear;
+    filter: brightness(0.3);
+    transform: scale(1.1);
+}
+
+.bg-slide.active {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .home-overlay {
@@ -27,7 +38,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(31, 31, 30, 0.8) 0%, rgba(58, 58, 56, 0.6) 100%);
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
 }
 
 .hero-section-new {
@@ -43,137 +54,113 @@
 }
 
 .hero-content-new {
-    margin-bottom: 4rem;
+    margin-bottom: clamp(40px, 10vh, 80px);
 }
 
 .hero-content-new h1 {
-    font-size: clamp(3rem, 8vw, 7rem);
-    font-weight: 400;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 200;
     color: var(--color-white);
-    margin-bottom: 1rem;
-    letter-spacing: -1px;
-    line-height: 1.1;
+    margin-bottom: 10px;
+    letter-spacing: -3px;
+    line-height: 0.9;
 }
 
 .hero-subtitle {
-    font-size: clamp(1.2rem, 3vw, 2rem);
-    color: var(--color-light-ash);
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    color: var(--color-sand-beige);
     font-weight: 300;
-    margin-bottom: 1rem;
-    letter-spacing: 2px;
+    margin-bottom: 20px;
+    letter-spacing: 8px;
     text-transform: uppercase;
+    opacity: 0.8;
 }
 
 .hero-tagline {
-    font-size: clamp(0.9rem, 2vw, 1.2rem);
-    color: var(--color-stone-grey);
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    color: #888;
     font-weight: 300;
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
+    letter-spacing: 1px;
+    line-height: 1.6;
 }
 
 .hero-buttons {
     display: flex;
-    gap: 3rem;
-    flex-wrap: wrap;
+    gap: 40px;
     justify-content: center;
 }
 
 .hero-btn {
     position: relative;
-    padding: 2rem 4rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: none;
+    padding: 20px 40px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--color-white);
-    font-family: var(--font-heading);
-    font-size: 1.8rem;
-    font-weight: 400;
-    letter-spacing: 1px;
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
     cursor: pointer;
     overflow: hidden;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.5rem;
-    min-width: 280px;
+    gap: 15px;
+    min-width: 220px;
     backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .hero-btn::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
+    left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-
-.hero-btn::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background: var(--color-white);
-    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    background: #fff;
+    transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
 }
 
 .hero-btn:hover::before {
-    opacity: 1;
-}
-
-.hero-btn:hover::after {
-    width: 80%;
+    left: 0;
 }
 
 .hero-btn:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
-    background: rgba(255, 255, 255, 0.08);
+    color: #000;
+    border-color: #fff;
+    transform: translateY(-5px);
 }
 
-.hero-btn:active {
-    transform: translateY(-2px);
-}
-
-.btn-text {
+.btn-text,
+.btn-arrow {
     position: relative;
     z-index: 1;
 }
 
 .btn-arrow {
-    font-size: 1.8rem;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    z-index: 1;
+    font-size: 1.2rem;
+    transition: transform 0.5s ease;
 }
 
 .hero-btn:hover .btn-arrow {
-    transform: translateX(8px);
+    transform: translateX(5px);
 }
 
 @media (max-width: 768px) {
-    .hero-content-new {
-        margin-bottom: 3rem;
-    }
-
     .hero-buttons {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 20px;
         width: 100%;
-        max-width: 320px;
+        max-width: 280px;
     }
 
     .hero-btn {
         width: 100%;
-        padding: 1.5rem 2rem;
-        font-size: 1.4rem;
+        padding: 15px 30px;
     }
 }

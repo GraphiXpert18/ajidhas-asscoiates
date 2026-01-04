@@ -1,0 +1,140 @@
+.collaboration-container {
+    width: 100%;
+    height: 100vh;
+    background-color: #111;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+}
+
+.collab-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+.collab-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.collab-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.6);
+    transform: scale(1.1);
+    transition: transform 6s ease-out;
+}
+
+.collab-slide.active .collab-bg-image {
+    transform: scale(1);
+}
+
+.collab-content-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    width: 80%;
+    max-width: 800px;
+}
+
+.collab-title {
+    font-size: 2rem;
+    font-weight: 300;
+    margin: 0 0 1rem 0;
+    letter-spacing: -1px;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.collab-subtitle {
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 2rem 0;
+    letter-spacing: 1px;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.collab-counter {
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.6);
+    opacity: 0;
+}
+
+.collab-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 3rem;
+    cursor: pointer;
+    z-index: 20;
+    padding: 20px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.collab-nav-btn:hover {
+    color: #fff;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.collab-prev {
+    left: 40px;
+}
+
+.collab-next {
+    right: 40px;
+}
+
+.collab-back-btn {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    z-index: 100;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.collab-back-btn:hover {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .collab-title {
+        font-size: 2rem;
+    }
+
+    .collab-nav-btn {
+        font-size: 2rem;
+        padding: 10px;
+    }
+
+    .collab-prev {
+        left: 10px;
+    }
+
+    .collab-next {
+        right: 10px;
+    }
+}
