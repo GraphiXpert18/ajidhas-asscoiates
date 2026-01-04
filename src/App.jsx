@@ -47,7 +47,7 @@ function App() {
           <Route path="/architecture/collaboration" element={<Collaboration />} />
           <Route path="/architecture/technology" element={<Technology />} />
           <Route path="/architecture/landscape" element={<Landscape />} />
-          <Route path="/architecture/contact" element={<Contact />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/architecture/arch-contact" element={<ArchitectureContact />} />
           <Route path="/architecture/inquiry" element={<ArchitectureInquiry />} />
           {/* Add other routes here */}

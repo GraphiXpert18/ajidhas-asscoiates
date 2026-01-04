@@ -1,136 +1,244 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
-import { IoArrowBack, IoChevronBack, IoChevronForward } from 'react-icons/io5';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { IoArrowBack } from 'react-icons/io5';
 import './Collaboration.css';
 
+// Using existing high-quality assets
+import arch1 from '../../assets/arch_project_1.png';
+import arch2 from '../../assets/arch_project_2.png';
+import villa1 from '../../assets/villa_lumiere.png';
 import buildingNight from '../../assets/building_night.png';
 
-const slides = [
+gsap.registerPlugin(ScrollTrigger);
+
+const collabData = [
     {
         id: 1,
-        title: "Edge of Light",
-        subtitle: "Discover the Pearl Collection",
-        image: buildingNight
+        title: "to the unknown",
+        subtitle: "AND BACK",
+        desc: "A collaborative journey into the depths of architectural surrealism, where boundaries between space and time dissolve into pure form.",
+        image: buildingNight,
+        label: "BEYOND LIMITS"
     },
     {
         id: 2,
-        title: "Silent Form",
-        subtitle: "Minimalist Structural Design",
-        image: buildingNight
+        title: "in the clouds",
+        subtitle: "GET LOST",
+        desc: "Dream the impossible dream with this artistic collaboration. We merge structural integrity with the ethereal nature of the sky.",
+        image: arch1,
+        label: "ETHEREAL FORMS"
     },
     {
         id: 3,
-        title: "Urban Echo",
-        subtitle: "Resonating with City Life",
-        image: buildingNight
+        title: "silent echoes",
+        subtitle: "LISTEN CLOSE",
+        desc: "Exploring the resonance of minimalist structures in vast, silent landscapes. A study in acoustic and visual harmony.",
+        image: arch2,
+        label: "MINIMAL RESONANCE"
     },
     {
         id: 4,
-        title: "Nature's Touch",
-        subtitle: "Organic Materials Integration",
-        image: buildingNight
+        title: "liquid light",
+        subtitle: "FLOW FREE",
+        desc: "Where architecture meets the fluid nature of light. A collaboration focused on dynamic transparency and reflection.",
+        image: villa1,
+        label: "DYNAMIC FLOW"
     }
 ];
 
 const Collaboration = () => {
     const navigate = useNavigate();
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isAnimating, setIsAnimating] = useState(false);
-
-    const titleRef = useRef(null);
-    const subtitleRef = useRef(null);
-    const counterRef = useRef(null);
-
-    const animateContentIn = () => {
-        const tl = gsap.timeline();
-        tl.to(titleRef.current, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' })
-            .to(subtitleRef.current, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, '-=0.8')
-            .to(counterRef.current, { opacity: 1, duration: 1 }, '-=0.8');
-    };
-
-    const animateContentOut = (callback) => {
-        const tl = gsap.timeline({ onComplete: callback });
-        tl.to(titleRef.current, { y: -30, opacity: 0, duration: 0.5, ease: 'power2.in' })
-            .to(subtitleRef.current, { y: -20, opacity: 0, duration: 0.5, ease: 'power2.in' }, '-=0.4')
-            .to(counterRef.current, { opacity: 0, duration: 0.5 }, '-=0.4');
-    };
+    const containerRef = useRef(null);
+    const sectionsRef = useRef([]);
 
     useEffect(() => {
-        // Initial load animation
-        gsap.set([titleRef.current, subtitleRef.current], { y: 30, opacity: 0 });
-        gsap.set(counterRef.current, { opacity: 0 });
-        animateContentIn();
+        const sections = sectionsRef.current;
+
+        sections.forEach((section, i) => {
+            if (!section) return;
+
+            const bgImg = section.querySelector('.collab-bg-image');
+            const bgOverlay = section.querySelector('.bg-overlay');
+            const titleChars = section.querySelectorAll('.title-char');
+            const subtitle = section.querySelector('.collab-hero-subtitle');
+            const desc = section.querySelector('.collab-hero-desc');
+            const label = section.querySelector('.collab-label-tag');
+            const contentLeft = section.querySelector('.content-left');
+            const contentRight = section.querySelector('.content-right');
+
+            // --- Advanced Image Scroll Animations ---
+            
+            // 1. Parallax + Zoom + Rotation
+            gsap.fromTo(bgImg, 
+                { scale: 1.4, y: '-10%', rotation: 2 },
+                {
+                    scale: 1,
+                    y: '10%',
+                    rotation: -2,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: true
+                    }
+                }
+            );
+
+            // 2. Dynamic Brightness/Filter on Scroll
+            gsap.fromTo(bgImg,
+                { filter: 'brightness(0.3) contrast(1.2) saturate(0.8)' },
+                {
+                    filter: 'brightness(0.6) contrast(1) saturate(1.1)',
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top center',
+                        end: 'bottom center',
+                        scrub: true
+                    }
+                }
+            );
+
+            // 3. Overlay Opacity Shift
+            gsap.to(bgOverlay, {
+                background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.8) 100%)',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            // --- Content Parallax ---
+            gsap.to(contentLeft, {
+                y: '-60px',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            gsap.to(contentRight, {
+                y: '-100px',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            // --- Text Entrance Timeline ---
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 45%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            tl.fromTo(label, 
+                { y: 30, opacity: 0, letterSpacing: '20px' },
+                { y: 0, opacity: 1, letterSpacing: '8px', duration: 1, ease: 'power4.out' }
+            )
+            .fromTo(titleChars,
+                { y: 120, opacity: 0, rotateX: -100, transformOrigin: '50% 0%' },
+                { 
+                    y: 0, 
+                    opacity: 1, 
+                    rotateX: 0, 
+                    duration: 1.5, 
+                    stagger: 0.04, 
+                    ease: 'expo.out' 
+                },
+                '-=0.7'
+            )
+            .fromTo(subtitle,
+                { x: -50, opacity: 0, filter: 'blur(10px)' },
+                { x: 0, opacity: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power3.out' },
+                '-=1'
+            )
+            .fromTo(desc,
+                { y: 40, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
+                '-=1'
+            )
+            .fromTo(section.querySelector('.collab-more-btn'),
+                { x: -30, opacity: 0 },
+                { x: 0, opacity: 1, duration: 1, ease: 'power4.out' },
+                '-=0.8'
+            );
+        });
+
+        return () => {
+            ScrollTrigger.getAll().forEach(t => t.kill());
+        };
     }, []);
 
-    const changeSlide = (direction) => {
-        if (isAnimating) return;
-        setIsAnimating(true);
-
-        animateContentOut(() => {
-            if (direction === 'next') {
-                setCurrentIndex((prev) => (prev + 1) % slides.length);
-            } else {
-                setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
-            }
-
-            // Reset positions for incoming animation
-            gsap.set([titleRef.current, subtitleRef.current], { y: 30 });
-
-            // Allow a brief moment for the DOM to update the text before animating in
-            setTimeout(() => {
-                animateContentIn();
-                setIsAnimating(false);
-            }, 100);
-        });
+    const handleBack = () => {
+        navigate('/architecture');
     };
 
-    // Auto-slide effect removed as per user request for static background
-    /*
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (!isAnimating) {
-                changeSlide('next');
-            }
-        }, 5000);
-
-        return () => clearTimeout(timer);
-    }, [currentIndex, isAnimating]);
-    */
+    const splitText = (text) => {
+        return text.split('').map((char, index) => (
+            <span key={index} className="title-char" style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}>
+                {char}
+            </span>
+        ));
+    };
 
     return (
-        <div className="collaboration-container">
-            <button className="collab-back-btn" onClick={() => navigate('/architecture')}>
+        <div className="collaboration-page" ref={containerRef}>
+            <button className="collab-back-btn" onClick={handleBack} aria-label="Go back">
                 <IoArrowBack />
             </button>
 
-            {slides.map((slide, index) => (
-                <div
-                    key={slide.id}
-                    className={`collab-slide ${index === currentIndex ? 'active' : ''}`}
-                >
-                    <img src={slide.image} alt={slide.title} className="collab-bg-image" />
-                </div>
-            ))}
+            <div className="collab-sections-wrapper">
+                {collabData.map((collab, index) => (
+                    <section 
+                        key={collab.id} 
+                        className="collab-hero-section"
+                        ref={el => sectionsRef.current[index] = el}
+                    >
+                        <div className="collab-bg-layer">
+                            <img src={collab.image} alt={collab.title} className="collab-bg-image" />
+                            <div className="bg-overlay"></div>
+                        </div>
 
-            <div className="collab-content-overlay">
-                <h1 className="collab-title" ref={titleRef}>
-                    {slides[currentIndex].title}
-                </h1>
-                <p className="collab-subtitle" ref={subtitleRef}>
-                    {slides[currentIndex].subtitle}
-                </p>
-                <div className="collab-counter" ref={counterRef}>
-                    0{currentIndex + 1} / 0{slides.length}
-                </div>
+                        <div className="collab-content-layer">
+                            <div className="content-left">
+                                <span className="collab-label-tag">{collab.label}</span>
+                                <h1 className="collab-hero-title">
+                                    {splitText(collab.title)}
+                                </h1>
+                                <p className="collab-hero-subtitle">{collab.subtitle}</p>
+                            </div>
+
+                            <div className="content-right">
+                                <p className="collab-hero-desc">{collab.desc}</p>
+                                <button className="collab-more-btn">
+                                    MORE
+                                    <span className="more-line"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="collab-bottom-ui">
+                            <div className="collab-scroll-hint">
+                                <span className="hint-text">0{index + 1}</span>
+                                <div className="hint-line"></div>
+                            </div>
+                        </div>
+                    </section>
+                ))}
             </div>
-
-            <button className="collab-nav-btn collab-prev" onClick={() => changeSlide('prev')}>
-                <IoChevronBack />
-            </button>
-            <button className="collab-nav-btn collab-next" onClick={() => changeSlide('next')}>
-                <IoChevronForward />
-            </button>
         </div>
     );
 };

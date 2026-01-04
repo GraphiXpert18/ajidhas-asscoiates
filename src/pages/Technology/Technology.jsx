@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
-import { IoArrowBack, IoArrowForward, IoArrowBack as IoArrowLeft, IoClose } from 'react-icons/io5';
+import { IoArrowBack } from 'react-icons/io5';
 import './Technology.css';
 
 import buildingNight from '../../assets/building_night.png';
+import arch1 from '../../assets/arch_project_1.png';
+import arch2 from '../../assets/arch_project_2.png';
+import villa1 from '../../assets/villa_lumiere.png';
+import villa2 from '../../assets/villa_solenne.png';
 
 const techItems = [
     {
@@ -15,187 +19,185 @@ const techItems = [
         description: "Exploring the boundaries of visual perception through architectural lens. A study in light, shadow, and form.",
         year: "2024",
         location: "Berlin",
-        subdivisions: ["01. Light Analysis", "02. Shadow Mapping", "03. Form Studies", "04. Perception"]
+        subImages: [arch1, arch2, villa1, villa2]
     },
     {
         id: 2,
         title: "Undesignated",
         subtitle: "09 Images",
-        image: buildingNight,
+        image: arch1,
         description: "Spaces that defy traditional categorization. Fluid environments designed for adaptability and change.",
         year: "2023",
         location: "Tokyo",
-        subdivisions: ["01. Fluid Spaces", "02. Adaptive Walls", "03. Kinetic Structures", "04. User Flow"]
+        subImages: [buildingNight, arch2, villa1, villa2]
     },
     {
         id: 3,
         title: "Florence",
         subtitle: "20 Images",
-        image: buildingNight,
+        image: arch2,
         description: "A modern reinterpretation of classical Renaissance principles. Harmony, proportion, and beauty in the digital age.",
         year: "2025",
         location: "Florence",
-        subdivisions: ["01. Classical Ratio", "02. Digital Stone", "03. Renaissance AI", "04. Harmony"]
+        subImages: [buildingNight, arch1, villa1, villa2]
     },
     {
         id: 4,
         title: "Coherence",
         subtitle: "15 Images",
-        image: buildingNight,
+        image: villa1,
         description: "Finding unity in chaos. Structural integrity meets organic growth patterns.",
         year: "2024",
         location: "New York",
-        subdivisions: ["01. Chaos Theory", "02. Organic Grid", "03. Structural Integrity", "04. Unity"]
+        subImages: [buildingNight, arch1, arch2, villa2]
     },
     {
         id: 5,
         title: "Urban Flux",
         subtitle: "18 Images",
-        image: buildingNight,
+        image: villa2,
         description: "Capturing the dynamic energy of metropolitan life. Architecture as a living, breathing entity.",
         year: "2023",
         location: "London",
-        subdivisions: ["01. City Pulse", "02. Dynamic Facades", "03. Living Walls", "04. Energy Flow"]
-    },
-    {
-        id: 6,
-        title: "Silent Spaces",
-        subtitle: "10 Images",
-        image: buildingNight,
-        description: "Minimalist sanctuaries designed for reflection and peace. The architecture of silence.",
-        year: "2025",
-        location: "Kyoto",
-        subdivisions: ["01. Acoustic Dampening", "02. Visual Silence", "03. Zen Gardens", "04. Reflection"]
+        subImages: [buildingNight, arch1, arch2, villa1]
     }
 ];
 
 const Technology = () => {
     const navigate = useNavigate();
-    const scrollRef = useRef(null);
-    const [selectedItem, setSelectedItem] = useState(null);
-    const [isPaused, setIsPaused] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [hoveredItem, setHoveredItem] = useState(null);
+    const marqueeRef = useRef(null);
+    const initialCardRef = useRef(null);
+    const marqueeTween = useRef(null);
+    const bottomTextRef = useRef(null);
 
-    // Auto-scroll removed as per user request
-    /*
     useEffect(() => {
-        const scrollContainer = scrollRef.current;
-        if (!scrollContainer) return;
+        // Initial Entrance Animation
+        const tl = gsap.timeline({
+            onComplete: () => setIsLoaded(true)
+        });
 
-        let animationFrameId;
+        tl.fromTo(initialCardRef.current,
+            { scale: 0.5, opacity: 0, y: 100 },
+            { scale: 1, opacity: 1, y: 0, duration: 1.2, ease: "power4.out" }
+        )
+            .to(initialCardRef.current, {
+                scale: 0.8,
+                opacity: 0,
+                duration: 0.8,
+                delay: 1,
+                ease: "power4.in"
+            })
+            .fromTo(".tech-marquee-container",
+                { opacity: 0, y: 50 },
+                { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+                "-=0.4"
+            );
 
-        const autoScroll = () => {
-            if (!isPaused) {
-                scrollContainer.scrollLeft += 1; // Adjust speed here
-                // Reset to start if reached end (for infinite loop effect, requires duplicated items or logic)
-                // For simple auto-scroll that stops at end:
-                if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
-                    scrollContainer.scrollLeft = 0; // Loop back to start
-                }
-            }
-            animationFrameId = requestAnimationFrame(autoScroll);
+        // Marquee Animation
+        const marquee = marqueeRef.current;
+        if (marquee) {
+            const totalWidth = marquee.scrollWidth / 2;
+            marqueeTween.current = gsap.to(marquee, {
+                x: -totalWidth,
+                duration: 30,
+                repeat: -1,
+                ease: "none"
+            });
+        }
+
+        return () => {
+            if (marqueeTween.current) marqueeTween.current.kill();
         };
+    }, []);
 
-        animationFrameId = requestAnimationFrame(autoScroll);
-
-        return () => cancelAnimationFrame(animationFrameId);
-    }, [isPaused]);
-    */
-
-    const scroll = (direction) => {
-        if (scrollRef.current) {
-            const { current } = scrollRef;
-            const scrollAmount = 340; // card width + gap
-            if (direction === 'left') {
-                current.scrollLeft -= scrollAmount;
+    useEffect(() => {
+        if (marqueeTween.current) {
+            if (hoveredItem !== null) {
+                marqueeTween.current.pause();
+                // Animate bottom text change
+                gsap.fromTo(bottomTextRef.current,
+                    { y: 20, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
+                );
             } else {
-                current.scrollLeft += scrollAmount;
+                marqueeTween.current.play();
+                // Animate back to "TECHNOLOGY"
+                gsap.fromTo(bottomTextRef.current,
+                    { y: -20, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
+                );
             }
         }
-    };
+    }, [hoveredItem]);
 
-    const openModal = (item) => {
-        setSelectedItem(item);
-    };
-
-    const closeModal = () => {
-        setSelectedItem(null);
+    const handleBack = () => {
+        navigate('/architecture');
     };
 
     return (
-        <div className="technology-container">
+        <div className="technology-page">
+            <button className="tech-back-btn" onClick={handleBack}>
+                <IoArrowBack />
+            </button>
 
+            {/* Initial Entrance Card */}
+            {!isLoaded && (
+                <div className="initial-card-overlay">
+                    <div className="initial-card" ref={initialCardRef}>
+                        <img src={techItems[0].image} alt="Tech" />
+                        <div className="initial-card-text">
+                            <span>Innovation</span>
+                            <h2>TECHNOLOGY</h2>
+                        </div>
+                    </div>
+                </div>
+            )}
 
-            <div
-                className="tech-gallery-wrapper"
-                ref={scrollRef}
-                onMouseEnter={() => setIsPaused(true)}
-                onMouseLeave={() => setIsPaused(false)}
-            >
-                {/* Duplicate items for smoother looping illusion if needed, but simple loop for now */}
-                {[...techItems, ...techItems].map((item, index) => (
-                    <div
-                        key={`${item.id}-${index}`}
-                        className="tech-card"
-                        onClick={() => openModal(item)}
-                    >
-                        <div className="tech-image-container">
-                            <img src={item.image} alt={item.title} />
-                            <div className="tech-hover-overlay">
-                                <h3 className="tech-hover-title">{item.title}</h3>
-                                <div className="tech-subdivisions">
-                                    {item.subdivisions.map((sub, i) => (
-                                        <p key={i} className="tech-sub-item">{sub}</p>
+            {/* Main Marquee Gallery */}
+            <div className={`tech-marquee-container ${isLoaded ? 'visible' : ''}`}>
+                <div className="tech-marquee-track" ref={marqueeRef}>
+                    {[...techItems, ...techItems].map((item, index) => (
+                        <div
+                            key={`${item.id}-${index}`}
+                            className={`tech-marquee-item ${hoveredItem?.id === item.id ? 'hovered' : ''}`}
+                            onMouseEnter={() => setHoveredItem(item)}
+                            onMouseLeave={() => setHoveredItem(null)}
+                        >
+                            <div className="tech-item-inner">
+                                <div className="tech-main-img">
+                                    <img src={item.image} alt={item.title} />
+                                    <div className="tech-item-overlay">
+                                        <div className="tech-item-details">
+                                            <span className="tech-item-year">{item.year}</span>
+                                            <p className="tech-item-desc">{item.description}</p>
+                                            <div className="tech-item-location">
+                                                <span>Location:</span> {item.location}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Vertical Sub-images on Hover */}
+                                <div className="tech-sub-images">
+                                    {item.subImages.map((subImg, i) => (
+                                        <div key={i} className="sub-img-wrapper" style={{ transitionDelay: `${i * 0.1}s` }}>
+                                            <img src={subImg} alt="sub" />
+                                        </div>
                                     ))}
                                 </div>
                             </div>
                         </div>
-                        <div className="tech-info">
-                            <h3 className="tech-card-title">{item.title}</h3>
-                            <p className="tech-card-subtitle">{item.subtitle}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            <div className="tech-footer">
-                <div className="tech-title-group">
-
-                    <h2 className="tech-section-title">TECHNOLOGY</h2>
+                    ))}
                 </div>
-
             </div>
 
-            {/* Detail Modal */}
-            <div className={`tech-modal-overlay ${selectedItem ? 'open' : ''}`}>
-                {selectedItem && (
-                    <div className="tech-modal-content">
-                        <button className="tech-modal-close" onClick={closeModal}>
-                            <IoClose />
-                        </button>
-                        <div className="tech-modal-image">
-                            <img src={selectedItem.image} alt={selectedItem.title} />
-                        </div>
-                        <div className="tech-modal-info">
-                            <h2 className="tech-modal-title">{selectedItem.title}</h2>
-                            <p className="tech-modal-desc">{selectedItem.description}</p>
-
-                            <div className="tech-modal-meta">
-                                <div className="meta-item">
-                                    <h4>Year</h4>
-                                    <p>{selectedItem.year}</p>
-                                </div>
-                                <div className="meta-item">
-                                    <h4>Location</h4>
-                                    <p>{selectedItem.location}</p>
-                                </div>
-                                <div className="meta-item">
-                                    <h4>Images</h4>
-                                    <p>{selectedItem.subtitle}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+            {/* Dynamic Bottom Title */}
+            <div className="tech-page-title">
+                <h1 ref={bottomTextRef}>
+                    {hoveredItem ? hoveredItem.title : "TECHNOLOGY"}
+                </h1>
             </div>
         </div>
     );
