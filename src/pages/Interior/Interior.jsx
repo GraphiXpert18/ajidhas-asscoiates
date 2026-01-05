@@ -5,140 +5,122 @@ import { IoArrowBack } from 'react-icons/io5';
 import './Interior.css';
 
 import buildingNight from '../../assets/building_night.png';
+import villaLumiere from '../../assets/villa_lumiere.png';
+import villaSolenne from '../../assets/villa_solenne.png';
+import archProject1 from '../../assets/arch_project_1.png';
 
 const interiors = [
-    { id: 1, title: 'Forty One Oaks', location: 'Portola Valley, CA', image: buildingNight },
-    { id: 2, title: 'Sentinal Ridge', location: 'Howell Mountain, CA', image: buildingNight },
-    { id: 3, title: 'White Sands', location: 'Carmel-by-the-sea, CA', image: buildingNight },
-    { id: 4, title: 'Dawnridge', location: 'Silicon Valley, CA', image: buildingNight },
-    { id: 5, title: '12 Moons', location: 'Sonoma, CA', image: buildingNight },
-    { id: 6, title: 'Foothills', location: 'Los Altos Hills, CA', image: buildingNight },
-    { id: 7, title: 'Zinfandel', location: 'St. Helena, CA', image: buildingNight },
-    { id: 8, title: 'Pinon Ranch', location: 'Portola Valley, CA', image: buildingNight },
-    { id: 9, title: 'Grasslands House', location: 'Carmel Valley, CA', image: buildingNight },
-    { id: 10, title: 'Oak Creek', location: 'Palo Alto, CA', image: buildingNight },
-    { id: 11, title: 'Silver Lake', location: 'Los Angeles, CA', image: buildingNight },
-    { id: 12, title: 'Mountain View', location: 'Aspen, CO', image: buildingNight },
-    { id: 13, title: 'Desert Rose', location: 'Palm Springs, CA', image: buildingNight },
-    { id: 14, title: 'Ocean Breeze', location: 'Malibu, CA', image: buildingNight },
+    { id: 1, title: 'Go-to-urban', subtitle: 'Descubre la colección Evo', image: villaLumiere },
+    { id: 2, title: 'Sublime', subtitle: 'Elegance in every detail', image: villaSolenne },
+    { id: 3, title: 'Urban Echo', subtitle: 'Modern living spaces', image: archProject1 },
+    { id: 4, title: 'Nightfall', subtitle: 'Shadows and light', image: buildingNight },
 ];
 
 const Interior = () => {
     const navigate = useNavigate();
-    const [activeProject, setActiveProject] = useState(interiors[0]);
-    const [isPaused, setIsPaused] = useState(false);
-    const imageRef = useRef(null);
-    const listRef = useRef(null);
-    const itemRefs = useRef([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [nextIndex, setNextIndex] = useState(1);
+    const [isAnimating, setIsAnimating] = useState(false);
+
+    const titleRef = useRef(null);
+    const subtitleRef = useRef(null);
+    const counterRef = useRef(null);
+    const bgRef = useRef(null);
+    const nextTitleRef = useRef(null);
 
     useEffect(() => {
-        // Initial entrance animation
+        // Initial animation
         const tl = gsap.timeline();
-        tl.fromTo('.collab-left', { xPercent: -100 }, { xPercent: 0, duration: 1.5, ease: 'power4.out' })
-            .fromTo('.collab-right', { xPercent: 100 }, { xPercent: 0, duration: 1.5, ease: 'power4.out' }, '-=1.5')
-            .fromTo('.collab-item', { opacity: 0, x: 50 }, { opacity: 1, x: 0, stagger: 0.1, duration: 1, ease: 'power3.out' }, '-=0.5');
+        tl.fromTo(titleRef.current, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' })
+            .fromTo(subtitleRef.current, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6')
+            .fromTo(counterRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8 }, '-=0.6')
+            .fromTo(nextTitleRef.current, { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8 }, '-=0.6');
     }, []);
 
-    // Auto-rotation removed as per user request
-    /*
+    // Auto-slide effect
     useEffect(() => {
-        if (isPaused) return;
+        const timer = setTimeout(() => {
+            if (!isAnimating) {
+                changeSlide();
+            }
+        }, 5000);
 
-        const interval = setInterval(() => {
-            const currentIndex = interiors.findIndex(p => p.id === activeProject.id);
-            const nextIndex = (currentIndex + 1) % interiors.length;
-            const nextProject = interiors[nextIndex];
+        return () => clearTimeout(timer);
+    }, [currentIndex, isAnimating]);
 
-            gsap.to(imageRef.current, {
-                opacity: 0,
-                duration: 0.4,
-                onComplete: () => {
-                    setActiveProject(nextProject);
-                    gsap.to(imageRef.current, { opacity: 1, duration: 0.6 });
-                }
-            });
-        }, 3000); // Faster rotation for better demo
+    const changeSlide = () => {
+        if (isAnimating) return;
+        setIsAnimating(true);
 
-        return () => clearInterval(interval);
-    }, [activeProject, isPaused]);
-    */
-
-    // Auto-scroll removed as per user request
-    /*
-    useEffect(() => {
-        if (isPaused) return;
-        const currentIndex = interiors.findIndex(p => p.id === activeProject.id);
-        if (itemRefs.current[currentIndex]) {
-            itemRefs.current[currentIndex].scrollIntoView({
-                behavior: 'smooth',
-                block: 'center',
-                inline: 'nearest'
-            });
-        }
-    }, [activeProject, isPaused]);
-    */
-
-    const handleHover = (project) => {
-        if (activeProject.id === project.id) return;
-
-        gsap.to(imageRef.current, {
-            opacity: 0,
-            duration: 0.4,
+        const tl = gsap.timeline({
             onComplete: () => {
-                setActiveProject(project);
-                gsap.to(imageRef.current, { opacity: 1, duration: 0.6 });
+                const newIndex = (currentIndex + 1) % interiors.length;
+                setCurrentIndex(newIndex);
+                setNextIndex((newIndex + 1) % interiors.length);
+                setIsAnimating(false);
+
+                // Animate In
+                gsap.fromTo([titleRef.current, subtitleRef.current, counterRef.current],
+                    { x: 100, opacity: 0 },
+                    { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1 }
+                );
+            }
+        });
+
+        // Animate Out
+        tl.to([titleRef.current, subtitleRef.current, counterRef.current], {
+            x: -100,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power3.in',
+            stagger: 0.05
+        });
+
+        // BG Animation
+        gsap.to(bgRef.current, {
+            scale: 1.1,
+            opacity: 0.4,
+            duration: 0.6,
+            yoyo: true,
+            repeat: 1,
+            onRepeat: () => {
+                // This is where we'd ideally swap the image source if we had different images
             }
         });
     };
 
     return (
-        <div className="collaboration-container">
+        <div className="interior-container">
+            <div className="interior-bg-wrapper">
+                <img
+                    ref={bgRef}
+                    src={interiors[currentIndex].image}
+                    alt="Background"
+                    className="interior-bg"
+                />
+                <div className="interior-overlay"></div>
+            </div>
 
-
-            <div className="collab-layout">
-                <div className="collab-left">
-                    <div className="active-image-wrapper">
-                        <img
-                            ref={imageRef}
-                            src={activeProject.image}
-                            alt={activeProject.title}
-                            className="active-collab-image"
-                        />
-                    </div>
-                    <div className="collab-title-overlay">
-                        <h1>{activeProject.title}</h1>
-                    </div>
-                </div>
-
-                <div
-                    className="collab-right"
-                    ref={listRef}
-                    onMouseEnter={() => setIsPaused(true)}
-                    onMouseLeave={() => setIsPaused(false)}
+            <div className="interior-content">
+                <h1
+                    ref={titleRef}
+                    className="interior-title"
+                    onClick={() => navigate('/architecture/interior/list', { state: { selectedId: interiors[currentIndex].id } })}
+                    style={{ cursor: 'pointer' }}
                 >
-                    <div className="collab-list-container">
-                        <div className="arc-visual">
-                            <div className="arc-line"></div>
-                            <div className="arc-arrow top">↑</div>
-                            <div className="arc-arrow bottom">↓</div>
-                        </div>
-
-                        <div className="collab-list">
-                            {interiors.map((project, index) => (
-                                <div
-                                    key={project.id}
-                                    ref={el => itemRefs.current[index] = el}
-                                    className={`collab-item ${activeProject.id === project.id ? 'active' : ''}`}
-                                    onMouseEnter={() => handleHover(project)}
-                                    onClick={() => navigate(`/architecture/project/${(project.id % 3) + 1}`)}
-                                >
-                                    <h2 className="project-name">{project.title}</h2>
-                                    <p className="project-loc">{project.location}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    {interiors[currentIndex].title}
+                </h1>
+                <p ref={subtitleRef} className="interior-subtitle">{interiors[currentIndex].subtitle}</p>
+                <div ref={counterRef} className="interior-counter">
+                    0{currentIndex + 1}/0{interiors.length}
                 </div>
+            </div>
+
+            <div className="interior-nav-right" onClick={changeSlide}>
+                <span ref={nextTitleRef} className="nav-next-title">{interiors[nextIndex].title}</span>
+                <button className="nav-btn-prof">
+                    <div className="arrow-circle-next">→</div>
+                </button>
             </div>
         </div>
     );

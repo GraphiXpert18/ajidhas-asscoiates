@@ -18,7 +18,7 @@ const architectureOptions = [
     { id: 6, title: 'Technology', path: '/architecture/technology', description: 'Tech & innovation' },
     { id: 7, title: 'Visualisation', path: '/architecture/visualisation', description: '3D & renders' },
     { id: 8, title: 'About', path: '/architecture/about', description: 'Our story' },
-    { id: 9, title: 'Contact', path: '/contact', description: 'Get in touch' },
+    { id: 9, title: 'Contact', path: '/architecture/contact', description: 'Get in touch' },
 ];
 
 const ArchitectureLanding = () => {
@@ -68,7 +68,7 @@ const ArchitectureLanding = () => {
             <div className="arch-content">
                 <div className="arch-header" ref={headerRef}>
                     <h1>Architecture</h1>
-
+                   
                 </div>
 
                 <div className="arch-grid" ref={gridRef}>
@@ -78,7 +78,7 @@ const ArchitectureLanding = () => {
                             className="arch-card"
                             onClick={() => navigate(option.path)}
                         >
-                            <div className="card-content">
+                            <div className="cad-content">
                                 <h3>{option.title}</h3>
                                 <p>{option.description}</p>
                             </div>
@@ -87,7 +87,6 @@ const ArchitectureLanding = () => {
                     ))}
                 </div>
             </div>
-
         </div>
     );
 };

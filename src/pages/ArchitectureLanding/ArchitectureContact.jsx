@@ -1,47 +1,104 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { gsap } from 'gsap';
 import './ArchitectureContact.css';
-import heroBg from '../../assets/hero_bg_night.png';
 
 const ArchitectureContact = () => {
   const navigate = useNavigate();
+  const containerRef = useRef(null);
+  const formRef = useRef(null);
+  const infoRef = useRef(null);
 
-  const openInquiry = () => {
-    navigate('/architecture/inquiry');
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    tl.fromTo(containerRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 1 }
+    )
+      .fromTo(infoRef.current,
+        { x: -50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.8 },
+        '-=0.5'
+      )
+      .fromTo(formRef.current,
+        { x: 50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.8 },
+        '-=0.6'
+      );
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    alert('Message sent successfully!');
   };
 
   return (
-    <div className="arch-contact-page">
-      <div className="contact-hero" style={{ backgroundImage: `url(${heroBg})` }}>
-        <div className="hero-overlay">
-          <div className="hero-top-left">look at google maps</div>
-          <h1 className="hero-title">Contact us</h1>
-        </div>
-      </div>
+    <div className="arch-contact-page" ref={containerRef}>
+    
 
-      <div className="contact-bottom">
-        <div className="contact-inner">
-            <div className="contact-left">
-              <h4>Our address</h4>
-              <p className="muted">12345 Moscow<br />Lane Dyatlov<br />Building 47 office 202</p>
+      <div className="contact-container">
+        <div className="contact-header">
+          <h1>Get in Touch</h1>
+        </div>
+
+        <div className="contact-content">
+          <div className="contact-info" ref={infoRef}>
+            <div className="info-group">
+              <h3>Visit Us</h3>
+              <p>Chennai, India</p>
             </div>
 
-            <div className="contact-right">
-              <h4>Our contacts</h4>
-              <p className="muted">
-                <a href="mailto:hello@frame.com">hello@frame.com</a><br />
-                <a href="tel:+79008007080">+7 900 800 70 80</a>
+            <div className="info-group">
+              <h3>Contact</h3>
+              <p>
+                <a href="mailto:ajidhassandassociates@gmail.com">ajidhassandassociates@gmail.com</a>
+                <br />
+                <a href="tel:+919790847621">+91 9790847621</a>
               </p>
             </div>
 
-            <div className="contact-inquiry">
-              <h4>Inquiry</h4>
-              <div className="inquiry-cta">
-                <p className="muted">Have a project or question? Send us a quick inquiry.</p>
-                <button onClick={openInquiry} className="open-inquiry-btn">Open Inquiry</button>
+            <div className="info-group">
+              <h3>Socials</h3>
+              <div className="social-links">
+                <a href="https://www.instagram.com/ajidhas_sand_associates/" target="_blank" rel="noreferrer">Instagram</a>
+                <a href="https://www.linkedin.com/company/ajidhas-sand-associates/" target="_blank" rel="noreferrer">LinkedIn</a>
+             
               </div>
             </div>
           </div>
+
+          <div className="contact-form-wrapper" ref={formRef}>
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="name">Name</label>
+                  <input type="text" id="name" required placeholder="Enter your name" />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input type="email" id="email" required placeholder="Enter your email" />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="subject">Subject</label>
+                <input type="text" id="subject" placeholder="Project Inquiry" />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="message">Message</label>
+                <textarea id="message" required placeholder="Tell us about your project..." rows="5"></textarea>
+              </div>
+
+              <button type="submit" className="submit-btn">
+                Send Message
+                <span className="btn-arrow">→</span>
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -69,9 +69,9 @@ const Collaboration = () => {
             const contentRight = section.querySelector('.content-right');
 
             // --- Advanced Image Scroll Animations ---
-            
+
             // 1. Parallax + Zoom + Rotation
-            gsap.fromTo(bgImg, 
+            gsap.fromTo(bgImg,
                 { scale: 1.4, y: '-10%', rotation: 2 },
                 {
                     scale: 1,
@@ -144,37 +144,37 @@ const Collaboration = () => {
                 }
             });
 
-            tl.fromTo(label, 
+            tl.fromTo(label,
                 { y: 30, opacity: 0, letterSpacing: '20px' },
                 { y: 0, opacity: 1, letterSpacing: '8px', duration: 1, ease: 'power4.out' }
             )
-            .fromTo(titleChars,
-                { y: 120, opacity: 0, rotateX: -100, transformOrigin: '50% 0%' },
-                { 
-                    y: 0, 
-                    opacity: 1, 
-                    rotateX: 0, 
-                    duration: 1.5, 
-                    stagger: 0.04, 
-                    ease: 'expo.out' 
-                },
-                '-=0.7'
-            )
-            .fromTo(subtitle,
-                { x: -50, opacity: 0, filter: 'blur(10px)' },
-                { x: 0, opacity: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power3.out' },
-                '-=1'
-            )
-            .fromTo(desc,
-                { y: 40, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
-                '-=1'
-            )
-            .fromTo(section.querySelector('.collab-more-btn'),
-                { x: -30, opacity: 0 },
-                { x: 0, opacity: 1, duration: 1, ease: 'power4.out' },
-                '-=0.8'
-            );
+                .fromTo(titleChars,
+                    { y: 120, opacity: 0, rotateX: -100, transformOrigin: '50% 0%' },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        rotateX: 0,
+                        duration: 1.5,
+                        stagger: 0.04,
+                        ease: 'expo.out'
+                    },
+                    '-=0.7'
+                )
+                .fromTo(subtitle,
+                    { x: -50, opacity: 0, filter: 'blur(10px)' },
+                    { x: 0, opacity: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power3.out' },
+                    '-=1'
+                )
+                .fromTo(desc,
+                    { y: 40, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
+                    '-=1'
+                )
+                .fromTo(section.querySelector('.collab-more-btn'),
+                    { x: -30, opacity: 0 },
+                    { x: 0, opacity: 1, duration: 1, ease: 'power4.out' },
+                    '-=0.8'
+                );
         });
 
         return () => {
@@ -196,14 +196,10 @@ const Collaboration = () => {
 
     return (
         <div className="collaboration-page" ref={containerRef}>
-            <button className="collab-back-btn" onClick={handleBack} aria-label="Go back">
-                <IoArrowBack />
-            </button>
-
             <div className="collab-sections-wrapper">
                 {collabData.map((collab, index) => (
-                    <section 
-                        key={collab.id} 
+                    <section
+                        key={collab.id}
                         className="collab-hero-section"
                         ref={el => sectionsRef.current[index] = el}
                     >
@@ -223,10 +219,6 @@ const Collaboration = () => {
 
                             <div className="content-right">
                                 <p className="collab-hero-desc">{collab.desc}</p>
-                                <button className="collab-more-btn">
-                                    MORE
-                                    <span className="more-line"></span>
-                                </button>
                             </div>
                         </div>
 

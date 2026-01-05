@@ -2,168 +2,155 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { IoArrowBack } from 'react-icons/io5';
 import './Visualisation.css';
 
 import buildingNight from '../../assets/building_night.png';
+import bg2 from '../../assets/hero_bg_architecture.png';
+import bg3 from '../../assets/home_bg.png';
+import art1 from '../../assets/art_1.png';
+import art2 from '../../assets/art_2.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
-    { id: 1, title: 'Haus am See', category: 'Residential', image: buildingNight },
-    { id: 2, title: 'Urban Loft', category: 'Property', image: buildingNight },
-    { id: 3, title: 'Alpine Retreat', category: 'Hospitality', image: buildingNight },
-    { id: 4, title: 'Tech Hub', category: 'Corporate', image: buildingNight },
-    { id: 5, title: 'Modern Villa', category: 'Residential', image: buildingNight },
-    { id: 6, title: 'City Center', category: 'Property', image: buildingNight },
+    { id: 1, title: 'Haus am See', category: 'Residential', image: buildingNight, year: '2024' },
+    { id: 2, title: 'Urban Loft', category: 'Property', image: bg2, year: '2023' },
+    { id: 3, title: 'Alpine Retreat', category: 'Hospitality', image: bg3, year: '2024' },
+    { id: 4, title: 'Tech Hub', category: 'Corporate', image: art1, year: '2022' },
+    { id: 5, title: 'Modern Villa', category: 'Residential', image: art2, year: '2024' },
+    { id: 6, title: 'City Center', category: 'Property', image: buildingNight, year: '2023' },
 ];
 
-const categories = ['Alle', 'Residential', 'Property', 'Hospitality', 'Corporate'];
-
 const Visualisation = () => {
-    const navigate = useNavigate();
-    const [activeCategory, setActiveCategory] = useState('Alle');
-    const [activeProject, setActiveProject] = useState(projects[0]);
-    const [isPaused, setIsPaused] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const marqueeRef = useRef(null);
     const titleRef = useRef(null);
-    const contentRef = useRef(null);
-    const projectRefs = useRef([]);
+    const imageRef = useRef(null);
+    const progressRef = useRef(null);
 
-    const filteredProjects = activeCategory === 'Alle'
-        ? projects
-        : projects.filter(p => p.category === activeCategory);
-
+    // Auto-slide logic
     useEffect(() => {
-        // Animate title change
-        gsap.fromTo(titleRef.current,
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
-        );
-    }, [activeProject]);
+        let interval;
+        if (isAutoPlaying) {
+            interval = setInterval(() => {
+                nextSlide();
+            }, 5000);
+        }
+        return () => clearInterval(interval);
+    }, [isAutoPlaying, currentIndex]);
 
-    // Auto-scroll removed as per user request
-    /*
+    // Marquee animation
     useEffect(() => {
-        const content = contentRef.current;
-        if (!content) return;
-
-        let animationFrameId;
-        const scrollSpeed = 1; // Pixels per frame
-
-        const autoScroll = () => {
-            if (!isPaused) {
-                if (content.scrollTop + content.clientHeight >= content.scrollHeight - 1) {
-                    // Reset to top if reached bottom (optional, or just stop)
-                    content.scrollTop = 0;
-                } else {
-                    content.scrollTop += scrollSpeed;
-                }
-            }
-            animationFrameId = requestAnimationFrame(autoScroll);
-        };
-
-        animationFrameId = requestAnimationFrame(autoScroll);
-
-        return () => cancelAnimationFrame(animationFrameId);
-    }, [isPaused, activeCategory]); // Restart when category changes
-    */
-
-    useEffect(() => {
-        // Intersection Observer for scroll detection
-        const observerOptions = {
-            root: contentRef.current,
-            threshold: 0.6 // Trigger when 60% of image is visible
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const index = Number(entry.target.dataset.index);
-                    if (filteredProjects[index]) {
-                        setActiveProject(filteredProjects[index]);
-                    }
-                    entry.target.classList.add('in-view');
-                } else {
-                    entry.target.classList.remove('in-view');
-                }
+        const marquee = marqueeRef.current;
+        if (marquee) {
+            gsap.to(marquee, {
+                xPercent: -50,
+                repeat: -1,
+                duration: 20,
+                ease: "none"
             });
-        }, observerOptions);
-
-        projectRefs.current.forEach(ref => {
-            if (ref) observer.observe(ref);
-        });
-
-        return () => observer.disconnect();
-    }, [filteredProjects]);
-
-    const handleCategoryChange = (cat) => {
-        setActiveCategory(cat);
-        // Reset scroll
-        if (contentRef.current) {
-            contentRef.current.scrollTop = 0;
         }
+    }, []);
+
+    // Slide transition animation
+    useEffect(() => {
+        const tl = gsap.timeline();
+
+        // Reset progress bar
+        gsap.set(progressRef.current, { scaleX: 0 });
+
+        tl.fromTo(titleRef.current,
+            { y: 50, opacity: 0, skewY: 7 },
+            { y: 0, opacity: 1, skewY: 0, duration: 1, ease: 'expo.out' }
+        )
+            .fromTo(imageRef.current,
+                { scale: 1.1, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 1.5, ease: 'expo.out' },
+                '-=0.8'
+            )
+            .to(progressRef.current, {
+                scaleX: 1,
+                duration: 5,
+                ease: 'none'
+            }, 0);
+
+    }, [currentIndex]);
+
+    const nextSlide = () => {
+        setCurrentIndex((prev) => (prev + 1) % projects.length);
     };
 
-    const scrollToProject = (index) => {
-        const target = projectRefs.current[index];
-        if (target && contentRef.current) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+    const prevSlide = () => {
+        setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
     };
+
+    const goToSlide = (index) => {
+        setCurrentIndex(index);
+        setIsAutoPlaying(false); // Pause auto-play on manual interaction
+        setTimeout(() => setIsAutoPlaying(true), 10000); // Resume after 10s
+    };
+
+    const activeProject = projects[currentIndex];
 
     return (
-        <div className="visualisation-container">
-
-
-            <div className="vis-sidebar">
-                <div className="vis-logo">
-                    Marcel Eberharter
-                </div>
-
-                <div className="vis-active-info">
-                    <h1 className="vis-project-title" ref={titleRef}>
-                        {activeProject.title}
-                    </h1>
-                </div>
-
-                <div className="vis-filters">
-                    {categories.map(cat => (
-                        <button
-                            key={cat}
-                            className={`vis-filter-btn ${activeCategory === cat ? 'active' : ''}`}
-                            onClick={() => handleCategoryChange(cat)}
-                        >
-                            {cat}
-                        </button>
-                    ))}
+        <div className="vis-dynamic-container">
+            {/* Background Marquee */}
+            <div className="vis-marquee-container">
+                <div className="vis-marquee-wrapper" ref={marqueeRef}>
+                    <span className="vis-marquee-text">VISUALISATION • RENDERING • ARCHITECTURE • DESIGN • </span>
+                    <span className="vis-marquee-text">VISUALISATION • RENDERING • ARCHITECTURE • DESIGN • </span>
                 </div>
             </div>
 
-            <div
-                className="vis-content"
-                ref={contentRef}
-                onMouseEnter={() => setIsPaused(true)}
-                onMouseLeave={() => setIsPaused(false)}
-            >
-                {filteredProjects.map((project, index) => (
-                    <div
-                        key={project.id}
-                        className="vis-image-wrapper"
-                        ref={el => projectRefs.current[index] = el}
-                        data-index={index}
-                    >
-                        <img src={project.image} alt={project.title} />
+            {/* Main Content */}
+            <div className="vis-main-layout">
+                <div className="vis-left-panel">
+                    <div className="vis-info-box">
+                        <span className="vis-category">{activeProject.category}</span>
+                        <div className="vis-title-reveal">
+                            <h1 className="vis-title" ref={titleRef}>{activeProject.title}</h1>
+                        </div>
+                        <div className="vis-meta">
+                            <span className="vis-year">{activeProject.year}</span>
+                            <div className="vis-divider"></div>
+                            <span className="vis-index">0{currentIndex + 1} / 0{projects.length}</span>
+                        </div>
                     </div>
-                ))}
+
+                    <div className="vis-controls">
+                        <button className="vis-nav-btn" onClick={prevSlide}>PREV</button>
+                        <div className="vis-progress-container">
+                            <div className="vis-progress-bar" ref={progressRef}></div>
+                        </div>
+                        <button className="vis-nav-btn" onClick={nextSlide}>NEXT</button>
+                    </div>
+                </div>
+
+                <div className="vis-right-panel">
+                    <div className="vis-image-container">
+                        <img
+                            ref={imageRef}
+                            src={activeProject.image}
+                            alt={activeProject.title}
+                            className="vis-featured-image"
+                        />
+                        <div className="vis-image-overlay"></div>
+                    </div>
+                </div>
             </div>
 
-            <div className="vis-indicators">
-                {filteredProjects.map((_, index) => (
-                    <button
-                        key={index}
-                        className={`vis-dot ${activeProject.id === filteredProjects[index].id ? 'active' : ''}`}
-                        onClick={() => scrollToProject(index)}
-                    />
+            {/* Thumbnails / Indicators */}
+            <div className="vis-thumbnails">
+                {projects.map((p, i) => (
+                    <div
+                        key={p.id}
+                        className={`vis-thumb-item ${i === currentIndex ? 'active' : ''}`}
+                        onClick={() => goToSlide(i)}
+                    >
+                        <div className="vis-thumb-line"></div>
+                        <span className="vis-thumb-num">0{i + 1}</span>
+                    </div>
                 ))}
             </div>
         </div>

@@ -121,18 +121,18 @@
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
-.card-content {
+.cad-content {
     color: var(--color-white);
 }
 
-.card-content h3 {
+.cad-content h3 {
     font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 0.5rem;
     letter-spacing: 0.5px;
 }
 
-.card-content p {
+.cad-content p {
     font-size: 0.9rem;
     color: var(--color-stone-grey);
     font-weight: 300;

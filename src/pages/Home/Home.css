@@ -58,8 +58,8 @@
 }
 
 .hero-content-new h1 {
-    font-size: clamp(3.5rem, 10vw, 8rem);
-    font-weight: 200;
+    font-size:7rem;
+    font-weight: 1500;
     color: var(--color-white);
     margin-bottom: 10px;
     letter-spacing: -3px;

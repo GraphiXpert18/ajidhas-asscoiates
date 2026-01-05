@@ -115,10 +115,8 @@ const Landscape = () => {
             {/* Back button removed as requested */}
 
             <div className="land-center-content">
-                <h1 className="land-title">Landscape<br />Section</h1>
-                <div className="land-subtitle">
-                    <span className="land-pill">articles</span>
-                </div>
+                <h1 className="land-title">Landscape</h1>
+                
             </div>
 
             <div className="land-marquee-wrapper">

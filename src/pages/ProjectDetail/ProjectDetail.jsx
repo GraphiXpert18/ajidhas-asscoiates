@@ -99,11 +99,9 @@ const ProjectDetail = () => {
 
     return (
         <div className="project-detail-page">
-            <button className="back-btn-prof detail-back" onClick={() => navigate(`/art/preview/${id}`)}>
-                <div className="arrow-circle">
-                    <IoArrowBack />
-                </div>
-            </button>
+            <div className="detail-dynamic-bg" style={{ backgroundImage: `url(${project.mainImage})` }}>
+                <div className="bg-overlay-dark"></div>
+            </div>
 
             <section className="project-hero" ref={heroRef}>
                 <div className="hero-content">

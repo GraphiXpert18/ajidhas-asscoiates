@@ -1,15 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
-import { IoArrowBack, IoArrowForward } from 'react-icons/io5';
-import { gsap } from 'gsap';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-
+import { IoArrowBack, IoAddOutline } from 'react-icons/io5';
 import './ProjectPreview.css';
 
 import art1 from '../../assets/art_1.png';
@@ -17,12 +8,12 @@ import art2 from '../../assets/art_2.png';
 import art3 from '../../assets/art_3.png';
 
 const projectImages = {
-    1: [art1, art2, art3, art1, art2, art3],
-    2: [art2, art3, art1, art2, art3, art1],
-    3: [art3, art1, art2, art3, art1, art2],
-    4: [art1, art2, art3, art1, art2, art3],
-    5: [art2, art3, art1, art2, art3, art1],
-    6: [art3, art1, art2, art3, art1, art2]
+    1: [art1, art2, art3, art1, art2, art3, art1, art2],
+    2: [art2, art3, art1, art2, art3, art1, art2, art3],
+    3: [art3, art1, art2, art3, art1, art2, art3, art1],
+    4: [art1, art2, art3, art1, art2, art3, art1, art2],
+    5: [art2, art3, art1, art2, art3, art1, art2, art3],
+    6: [art3, art1, art2, art3, art1, art2, art3, art1]
 };
 
 const projectData = {
@@ -39,116 +30,135 @@ const ProjectPreview = () => {
     const navigate = useNavigate();
     const images = projectImages[id] || projectImages[1];
     const project = projectData[id] || projectData[1];
-    const containerRef = useRef(null);
-    const [activeIndex, setActiveIndex] = useState(0);
+
+    const [rotation, setRotation] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+    const [hoveredIndex, setHoveredIndex] = useState(null);
+    const requestRef = useRef();
+
+    // Calculate which image is currently at the front
+    const total = images.length;
+    const angleStep = 360 / total;
+    const activeIndex = Math.round(((-rotation % 360) + 360) % 360 / angleStep) % total;
 
     useEffect(() => {
         window.scrollTo(0, 0);
 
-        const tl = gsap.timeline();
+        const animate = () => {
+            if (!isPaused) {
+                setRotation(prev => prev - 0.15);
+            }
+            requestRef.current = requestAnimationFrame(animate);
+        };
 
-        tl.fromTo('.preview-header-minimal',
-            { y: -50, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out' }
-        )
-            .fromTo('.preview-swiper',
-                { scale: 0.9, opacity: 0 },
-                { scale: 1, opacity: 1, duration: 1.5, ease: 'expo.out' },
-                '-=0.8'
-            )
-            .fromTo('.preview-footer-minimal',
-                { y: 30, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
-                '-=1'
-            );
-    }, [id]);
+        requestRef.current = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(requestRef.current);
+    }, [isPaused]);
+
+    const getCardStyle = (index) => {
+        const currentAngle = (angleStep * index + rotation) % 360;
+        const angleRad = (currentAngle * Math.PI) / 180;
+
+        const radiusX = window.innerWidth > 1200 ? 500 : (window.innerWidth > 768 ? 400 : 250);
+        const radiusZ = 500;
+
+        const x = Math.sin(angleRad) * radiusX;
+        const z = Math.cos(angleRad) * radiusZ;
+
+        const normalizedZ = (z + radiusZ) / (2 * radiusZ);
+        const scale = normalizedZ * 0.6 + 0.4;
+        const opacity = normalizedZ * 0.8 + 0.2;
+        const blur = (1 - normalizedZ) * 6;
+        const rotateY = -Math.sin(angleRad) * 20;
+
+        if (hoveredIndex === index) {
+            return {
+                transform: `translate3d(0, 0, 600px) scale(1.1) rotateY(0deg)`,
+                zIndex: 2000,
+                opacity: 1,
+                filter: 'blur(0px)',
+                transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease, filter 0.6s ease'
+            };
+        }
+
+        return {
+            transform: `translate3d(${x}px, 0, ${z}px) scale(${scale}) rotateY(${rotateY}deg)`,
+            zIndex: Math.round(z + radiusZ),
+            opacity: opacity,
+            filter: `blur(${blur}px)`,
+            transition: 'transform 0.1s linear, opacity 0.4s ease, filter 0.4s ease'
+        };
+    };
 
     return (
-        <div className="project-preview-page-3d" ref={containerRef}>
-            {/* Dynamic Background */}
-            <div className="preview-bg-glow"></div>
-
-            <div className="preview-header-minimal">
-                <button className="back-btn-prof" onClick={() => navigate('/art/gallery')}>
-                    <div className="arrow-circle">
-                        <IoArrowBack />
-                    </div>
-                </button>
-                <div className="preview-title-minimal">
-                    <span className="category-label">{project.category}</span>
-                    <h2 className="project-title-main">{project.title}</h2>
-                </div>
+        <div className="project-preview-container circular-layout">
+            {/* Dynamic Blurred Background */}
+            <div className="preview-dynamic-bg">
+                {images.map((img, index) => (
+                    <div
+                        key={index}
+                        className={`bg-image-layer ${activeIndex === index ? 'active' : ''}`}
+                        style={{ backgroundImage: `url(${img})` }}
+                    />
+                ))}
+                <div className="bg-overlay-dark"></div>
             </div>
 
-            <div className="preview-carousel-wrapper">
-                <Swiper
-                    effect={'coverflow'}
-                    grabCursor={true}
-                    centeredSlides={true}
-                    slidesPerView={'auto'}
-                    loop={true}
-                    coverflowEffect={{
-                        rotate: 5,
-                        stretch: 0,
-                        depth: 150,
-                        modifier: 2,
-                        slideShadows: false,
-                    }}
-                    autoplay={{
-                        delay: 4000,
-                        disableOnInteraction: false,
-                    }}
-                    onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                    modules={[EffectCoverflow, Autoplay, Navigation, Pagination]}
-                    className="preview-swiper"
-                >
+            <header className="preview-header">
+                <div className="header-info">
+                    <span className="category">{project.category}</span>
+                    <h1 className="title">{project.title}</h1>
+                </div>
+            </header>
+
+            <div className="preview-circular-viewport">
+                <div className="nav-indicator left">
+                    <div className="cross-icon"><IoAddOutline /></div>
+                </div>
+
+                <div className="cards-ring">
                     {images.map((img, index) => (
-                        <SwiperSlide key={index}>
-                            <div
-                                className="preview-card-3d"
-                                onClick={() => navigate(`/art/project/${id}`)}
-                            >
-                                <div className="preview-image-container">
-                                    <img src={img} alt={`Preview ${index}`} />
-                                    <div className="preview-card-overlay"></div>
-
-                                    {/* Architectural Frame */}
-                                    <div className="card-frame"></div>
-                                </div>
-
-                                <div className="hover-details-overlay">
-                                    <div className="hover-content">
-                                        <span className="hover-category">{project.category}</span>
-                                        <h3 className="hover-title">{project.title}</h3>
-                                        <div className="hover-divider"></div>
-                                        <p className="hover-action">Explore Details</p>
+                        <div
+                            key={index}
+                            className={`preview-card-3d ${hoveredIndex === index ? 'hovered' : ''}`}
+                            style={getCardStyle(index)}
+                            onMouseEnter={() => {
+                                setIsPaused(true);
+                                setHoveredIndex(index);
+                            }}
+                            onMouseLeave={() => {
+                                setIsPaused(false);
+                                setHoveredIndex(null);
+                            }}
+                            onClick={() => navigate(`/art/project/${id}`)}
+                        >
+                            <div className="card-inner">
+                                <img src={img} alt={`${project.title} ${index}`} />
+                                <div className="card-overlay">
+                                    <div className="card-info">
+                                        <span className="card-index">0{index + 1}</span>
+                                        <h3 className="card-title">{project.title}</h3>
+                                        <p className="view-text">Explore Project</p>
                                     </div>
                                 </div>
-
-                                <div className="card-index">0{index + 1}</div>
                             </div>
-                        </SwiperSlide>
+                        </div>
                     ))}
-                </Swiper>
+                </div>
 
-                {/* Custom Navigation */}
-                <div className="preview-nav-controls">
-                    <div className="nav-progress-bar">
-                        <div
-                            className="nav-progress-fill"
-                            style={{ width: `${((activeIndex + 1) / images.length) * 100}%` }}
-                        ></div>
-                    </div>
+                <div className="nav-indicator right">
+                    <div className="cross-icon"><IoAddOutline /></div>
                 </div>
             </div>
 
-            <div className="preview-footer-minimal">
-                <div className="footer-info">
-                    <span className="scroll-text">Scroll to explore</span>
-                    <div className="scroll-line-animated"></div>
+            <footer className="preview-footer">
+                <div className="footer-meta">
+                    <span>{project.year} © AJIDHAS ASSOCIATES</span>
                 </div>
-                <div className="project-year">{project.year} © Studio</div>
-            </div>
+                <div className="scroll-hint">
+                    <span>Hover to sharpen • Click to view</span>
+                </div>
+            </footer>
         </div>
     );
 };

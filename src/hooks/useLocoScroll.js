@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -6,6 +7,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const useLocoScroll = (start = true) => {
+    const location = useLocation();
+
     useEffect(() => {
         if (!start) return;
 
@@ -23,17 +26,26 @@ const useLocoScroll = (start = true) => {
         // Sync ScrollTrigger with Lenis
         lenis.on('scroll', ScrollTrigger.update);
 
-        gsap.ticker.add((time) => {
-            lenis.raf(time * 1000);
-        });
+        const raf = (time) => {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        };
+        requestAnimationFrame(raf);
 
-        gsap.ticker.lagSmoothing(0);
+        // Re-sync on route change
+        lenis.scrollTo(0, { immediate: true });
+
+        // Handle resize
+        const handleResize = () => {
+            lenis.resize();
+        };
+        window.addEventListener('resize', handleResize);
 
         return () => {
             lenis.destroy();
-            gsap.ticker.remove(lenis.raf);
+            window.removeEventListener('resize', handleResize);
         };
-    }, [start]);
+    }, [start, location.pathname]);
 };
 
 export default useLocoScroll;

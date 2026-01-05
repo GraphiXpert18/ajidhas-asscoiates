@@ -4,7 +4,7 @@ import { gsap } from 'gsap';
 import { IoArrowBack } from 'react-icons/io5';
 import './Technology.css';
 
-import buildingNight from '../../assets/building_night.png';
+import buildingNight from '../../assets/villa_solenne.png';
 import arch1 from '../../assets/arch_project_1.png';
 import arch2 from '../../assets/arch_project_2.png';
 import villa1 from '../../assets/villa_lumiere.png';
@@ -138,9 +138,7 @@ const Technology = () => {
 
     return (
         <div className="technology-page">
-            <button className="tech-back-btn" onClick={handleBack}>
-                <IoArrowBack />
-            </button>
+            
 
             {/* Initial Entrance Card */}
             {!isLoaded && (

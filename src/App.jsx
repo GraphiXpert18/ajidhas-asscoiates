@@ -9,6 +9,7 @@ import ArchitectureProjects from './pages/ArchitectureProjects/ArchitectureProje
 import ArchitectureAllWork from './pages/ArchitectureAllWork/ArchitectureAllWork';
 import ArchitectureProjectDetail from './pages/ArchitectureProjectDetail/ArchitectureProjectDetail';
 import Interior from './pages/Interior/Interior';
+import InteriorProjectList from './pages/Interior/InteriorProjectList';
 import ArchitectureContact from './pages/ArchitectureLanding/ArchitectureContact';
 import ArchitectureInquiry from './pages/ArchitectureLanding/ArchitectureInquiry';
 import Artist from './pages/Artist/Artist';
@@ -17,14 +18,12 @@ import ProjectDetail from './pages/ProjectDetail/ProjectDetail';
 import ProjectPreview from './pages/ProjectPreview/ProjectPreview';
 import './index.css';
 
-import About from './pages/About/About'; // Import About
-
-import Visualisation from './pages/Visualisation/Visualisation'; // Import Visualisation
-
+import About from './pages/About/About';
+import Visualisation from './pages/Visualisation/Visualisation';
 import Technology from './pages/Technology/Technology';
-import Landscape from './pages/Landscape/Landscape'; // Import Landscape
-import Collaboration from './pages/Collaboration/Collaboration'; // Import Collaboration
-import Contact from './pages/Contact/Contact'; // Import Contact
+import Landscape from './pages/Landscape/Landscape';
+import Collaboration from './pages/Collaboration/Collaboration';
+import Contact from './pages/Contact/Contact';
 
 function App() {
   return (
@@ -44,11 +43,12 @@ function App() {
           <Route path="/architecture/all-work" element={<ArchitectureAllWork />} />
           <Route path="/architecture/project/:id" element={<ArchitectureProjectDetail />} />
           <Route path="/architecture/interior" element={<Interior />} />
+          <Route path="/architecture/interior/list" element={<InteriorProjectList />} />
           <Route path="/architecture/collaboration" element={<Collaboration />} />
           <Route path="/architecture/technology" element={<Technology />} />
           <Route path="/architecture/landscape" element={<Landscape />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/architecture/arch-contact" element={<ArchitectureContact />} />
+          <Route path="/architecture/contact" element={<ArchitectureContact />} />
           <Route path="/architecture/inquiry" element={<ArchitectureInquiry />} />
           {/* Add other routes here */}
         </Routes>

@@ -1,185 +1,69 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
-import { IoPlayOutline, IoArrowBack, IoArrowForward } from 'react-icons/io5';
-import { gsap } from 'gsap';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-
+import { IoArrowBack } from 'react-icons/io5';
 import './GallerySeries.css';
 
 import art1 from '../../assets/art_1.png';
 import art2 from '../../assets/art_2.png';
 import art3 from '../../assets/art_3.png';
 
-const backgroundImages = [art1, art2, art3];
-
-const projects = [
-    {
-        id: 1,
-        title: 'Hatha Yoga',
-        subtitle: 'Balance • Energy • Calm',
-        image: art1,
-        category: 'Series 01'
-    },
-    {
-        id: 2,
-        title: 'Vinyasa Yoga',
-        subtitle: 'Flow • Strength • Breath',
-        image: art2,
-        category: 'Series 02'
-    },
-    {
-        id: 3,
-        title: 'Ashtanga Yoga',
-        subtitle: 'Power • Discipline • Focus',
-        image: art3,
-        category: 'Series 03'
-    },
-    {
-        id: 4,
-        title: 'Yin Yoga',
-        subtitle: 'Deep • Still • Restore',
-        image: art1,
-        category: 'Series 04'
-    },
-    {
-        id: 5,
-        title: 'Kundalini Yoga',
-        subtitle: 'Spirit • Awaken • Vitality',
-        image: art2,
-        category: 'Series 05'
-    },
-    {
-        id: 6,
-        title: 'Restorative Yoga',
-        subtitle: 'Heal • Relax • Renew',
-        image: art3,
-        category: 'Series 06'
-    }
+const galleryImages = [
+    { id: 1, title: 'Hatha Yoga', label: 'Series 01', image: art1 },
+    { id: 2, title: 'Vinyasa Yoga', label: 'Series 02', image: art2 },
+    { id: 3, title: 'Ashtanga Yoga', label: 'Series 03', image: art3 },
+    { id: 4, title: 'Yin Yoga', label: 'Series 04', image: art1 },
+    { id: 5, title: 'Kundalini Yoga', label: 'Series 05', image: art2 },
+    { id: 6, title: 'Restorative Yoga', label: 'Series 06', image: art3 },
 ];
 
 const GallerySeries = () => {
     const navigate = useNavigate();
-    const containerRef = useRef(null);
-    const [currentBg, setCurrentBg] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
-        }, 5000);
-        return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
-        gsap.fromTo(containerRef.current,
-            { opacity: 0 },
-            { opacity: 1, duration: 1, ease: 'power2.out' }
-        );
-    }, []);
+    // Duplicate images for seamless loop
+    const displayImages = [...galleryImages, ...galleryImages];
 
     return (
-        <div className="gallery-series-3d" ref={containerRef}>
-            <div className="gallery-background-slider">
-                {backgroundImages.map((img, index) => (
-                    <img
-                        key={index}
-                        src={img}
-                        alt={`Background ${index}`}
-                        className={`gallery-bg-slide ${index === currentBg ? 'active' : ''}`}
-                    />
-                ))}
-                <div className="gallery-bg-overlay"></div>
-            </div>
-
-            <header className="gallery-3d-header">
-                <button className="back-btn-prof" onClick={() => navigate('/art')}>
-                    <div className="arrow-circle">
-                        <IoArrowBack />
-                    </div>
-                </button>
-                <span className="label">Artistic Series</span>
-                <h1>Gallery Collection</h1>
+        <div className="gallery-page-container">
+            <header className="gallery-header">
+                <div className="header-text">
+                    <span className="header-label">Curated Collection</span>
+                    <h1 className="header-title">Artistic Series</h1>
+                </div>
             </header>
 
-            <div className="swiper-container-wrapper">
-                <Swiper
-                    effect={'coverflow'}
-                    grabCursor={true}
-                    centeredSlides={true}
-                    slidesPerView={'auto'}
-                    loop={true}
-                    coverflowEffect={{
-                        rotate: 30,
-                        stretch: 0,
-                        depth: 200,
-                        modifier: 1,
-                        slideShadows: true,
-                    }}
-                    autoplay={{
-                        delay: 3000,
-                        disableOnInteraction: false,
-                        pauseOnMouseEnter: true
-                    }}
-                    pagination={{
-                        clickable: true,
-                        dynamicBullets: true
-                    }}
-                    navigation={{
-                        nextEl: '.swiper-button-next-custom',
-                        prevEl: '.swiper-button-prev-custom',
-                    }}
-                    modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
-                    className="mySwiper"
+            <div className="gallery-3d-viewport">
+                <div
+                    className={`gallery-3d-track ${isPaused ? 'paused' : ''}`}
+                    onMouseEnter={() => setIsPaused(true)}
+                    onMouseLeave={() => setIsPaused(false)}
                 >
-                    {projects.map((project) => (
-                        <SwiperSlide key={project.id}>
+                    {displayImages.map((item, index) => (
+                        <div key={`${item.id}-${index}`} className="gallery-card-container">
                             <div
-                                className="card-3d"
-                                onClick={() => navigate(`/art/preview/${project.id}`)}
+                                className="gallery-card"
+                                onClick={() => navigate(`/art/preview/${item.id}`)}
                             >
-                                <div className="card-image-wrapper">
-                                    <img src={project.image} alt={project.title} />
+                                <div className="card-image-box">
+                                    <img src={item.image} alt={item.title} />
                                     <div className="card-overlay"></div>
-                                </div>
-
-                                <div className="card-content-top">
-                                    <h2 className="card-title">{project.title}</h2>
-                                    <p className="card-subtitle">{project.subtitle}</p>
-                                </div>
-
-
-                                <div className="card-footer">
-                                    <span className="card-category">{project.category}</span>
+                                    <div className="card-content">
+                                        <span className="card-label">{item.label}</span>
+                                        <h3 className="card-title">{item.title}</h3>
+                                    </div>
+                                    <div className="card-reflection"></div>
                                 </div>
                             </div>
-                        </SwiperSlide>
+                        </div>
                     ))}
-                </Swiper>
-
-                {/* Custom Navigation Buttons */}
-                <div className="swiper-button-prev-custom">
-                    <div className="nav-icon-wrapper">
-                        <IoArrowBack />
-                    </div>
-                    <div className="nav-line"></div>
-                </div>
-                <div className="swiper-button-next-custom">
-                    <div className="nav-icon-wrapper">
-                        <IoArrowForward />
-                    </div>
-                    <div className="nav-line"></div>
                 </div>
             </div>
 
-            <div className="scroll-hint">
-                <p> explore the collection</p>
-                <div className="drag-line"></div>
+            <div className="gallery-footer">
+                <div className="scroll-indicator">
+                    <div className="indicator-line"></div>
+                    <span>Scroll to explore</span>
+                </div>
             </div>
         </div>
     );

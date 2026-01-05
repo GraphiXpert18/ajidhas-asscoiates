@@ -9,11 +9,13 @@ const Layout = ({ children }) => {
     const location = useLocation();
     const isHomePage = location.pathname === '/';
 
+    const isLandscapePage = location.pathname.startsWith('/architecture/landscape');
+
     useLocoScroll();
 
     return (
         <div className="layout-wrapper">
-            {!isHomePage && <Navbar />}
+            {!isHomePage && !isLandscapePage && <Navbar />}
             <main className="main-content">
                 {children}
             </main>
