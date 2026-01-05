@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './ArchitectureContact.css';
+import mapBg from '../../assets/dark_architectural_map.png';
+
 
 const ArchitectureContact = () => {
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ const ArchitectureContact = () => {
 
   return (
     <div className="arch-contact-page" ref={containerRef}>
-    
+
 
       <div className="contact-container">
         <div className="contact-header">
@@ -64,7 +66,7 @@ const ArchitectureContact = () => {
               <div className="social-links">
                 <a href="https://www.instagram.com/ajidhas_sand_associates/" target="_blank" rel="noreferrer">Instagram</a>
                 <a href="https://www.linkedin.com/company/ajidhas-sand-associates/" target="_blank" rel="noreferrer">LinkedIn</a>
-             
+
               </div>
             </div>
           </div>
@@ -97,6 +99,35 @@ const ArchitectureContact = () => {
                 <span className="btn-arrow">→</span>
               </button>
             </form>
+          </div>
+        </div>
+      </div>
+
+      <div className="contact-map-section">
+        <div className="map-background">
+          <img src={mapBg} alt="Map" />
+          <div className="map-overlay"></div>
+        </div>
+
+        <div className="map-content">
+          <div className="map-top">
+            <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="google-maps-link">
+              look at google maps <span className="link-line"></span>
+            </a>
+          </div>
+
+          <a
+            href="https://maps.google.com"
+            target="_blank"
+            rel="noreferrer"
+            className="location-button"
+          >
+            <span className="loc-dot"></span>
+            Our Location
+          </a>
+
+          <div className="map-bottom">
+            <h2 className="contact-us-text">Contact us</h2>
           </div>
         </div>
       </div>

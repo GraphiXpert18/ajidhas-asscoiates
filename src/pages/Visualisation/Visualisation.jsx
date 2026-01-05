@@ -9,149 +9,385 @@ import bg2 from '../../assets/hero_bg_architecture.png';
 import bg3 from '../../assets/home_bg.png';
 import art1 from '../../assets/art_1.png';
 import art2 from '../../assets/art_2.png';
+import art3 from '../../assets/art_3.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
-    { id: 1, title: 'Haus am See', category: 'Residential', image: buildingNight, year: '2024' },
-    { id: 2, title: 'Urban Loft', category: 'Property', image: bg2, year: '2023' },
-    { id: 3, title: 'Alpine Retreat', category: 'Hospitality', image: bg3, year: '2024' },
-    { id: 4, title: 'Tech Hub', category: 'Corporate', image: art1, year: '2022' },
-    { id: 5, title: 'Modern Villa', category: 'Residential', image: art2, year: '2024' },
-    { id: 6, title: 'City Center', category: 'Property', image: buildingNight, year: '2023' },
+    {
+        id: 1,
+        title: 'Haus am See',
+        category: 'RESIDENTIAL',
+        image: art3,
+        description: 'A minimalist retreat nestled by the serene waters, blending modern geometry with natural tranquility.'
+    },
+    {
+        id: 2,
+        title: 'Urban Loft',
+        category: 'PROPERTY',
+        image: bg2,
+        description: 'Sophisticated industrial living in the heart of the city, featuring open spaces and raw material palettes.'
+    },
+    {
+        id: 3,
+        title: 'Alpine Retreat',
+        category: 'HOSPITALITY',
+        image: bg3,
+        description: 'Luxury mountain lodging designed to withstand the elements while providing unparalleled warmth and comfort.'
+    },
+    {
+        id: 4,
+        title: 'Tech Hub',
+        category: 'CORPORATE',
+        image: art1,
+        description: 'A futuristic workspace fostering innovation through dynamic architecture and integrated technology.'
+    },
+    {
+        id: 5,
+        title: 'Modern Villa',
+        category: 'RESIDENTIAL',
+        image: art2,
+        description: 'A private sanctuary of clean lines and expansive glass, redefining the boundaries between indoor and outdoor living.'
+    },
+    {
+        id: 6,
+        title: 'City Center',
+        category: 'PROPERTY',
+        image: buildingNight,
+        description: 'A landmark development revitalizing the urban core with sustainable design and vibrant public spaces.'
+    },
+    {
+        id: 7,
+        title: 'Glass Pavilion',
+        category: 'RESIDENTIAL',
+        image: art3,
+        description: 'An ethereal structure of transparency and light, floating within a lush landscape.'
+    },
+    {
+        id: 8,
+        title: 'Sky Garden',
+        category: 'CORPORATE',
+        image: bg2,
+        description: 'Elevated green spaces integrated into a high-rise office tower, promoting wellness and productivity.'
+    },
+    {
+        id: 9,
+        title: 'Ocean View',
+        category: 'HOSPITALITY',
+        image: bg3,
+        description: 'A coastal resort that mimics the rhythm of the waves, offering panoramic vistas of the horizon.'
+    },
+    {
+        id: 10,
+        title: 'The Monolith',
+        category: 'PROPERTY',
+        image: art1,
+        description: 'A bold architectural statement of solid form and precise shadow play.'
+    },
+    {
+        id: 11,
+        title: 'Zen Retreat',
+        category: 'RESIDENTIAL',
+        image: art2,
+        description: 'A peaceful abode inspired by Eastern philosophy, focusing on balance, simplicity, and natural light.'
+    },
+    {
+        id: 12,
+        title: 'Future Lab',
+        category: 'CORPORATE',
+        image: art3,
+        description: 'An experimental research facility where architecture serves as a catalyst for scientific discovery.'
+    },
 ];
 
 const Visualisation = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-    const marqueeRef = useRef(null);
-    const titleRef = useRef(null);
-    const imageRef = useRef(null);
-    const progressRef = useRef(null);
+    const scrollAreaRef = useRef(null);
+    const projectRefs = useRef([]);
+    const [isPaused, setIsPaused] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(0);
 
-    // Auto-slide logic
+    // Auto-scrolling logic - Snap to next every 5 seconds
     useEffect(() => {
-        let interval;
-        if (isAutoPlaying) {
-            interval = setInterval(() => {
-                nextSlide();
+        const scrollArea = scrollAreaRef.current;
+        if (!scrollArea) return;
+
+        let intervalId;
+
+        const startAutoScroll = () => {
+            intervalId = setInterval(() => {
+                if (!isPaused) {
+                    const nextIndex = activeIndex + 1;
+
+                    if (nextIndex >= projects.length) {
+                        // If at the last real project, scroll to the clone
+                        scrollToIndex(nextIndex);
+                        // Then jump back to start after animation
+                        setTimeout(() => {
+                            const scrollArea = scrollAreaRef.current;
+                            if (scrollArea) {
+                                scrollArea.scrollTo({ top: 0, behavior: 'auto' });
+                                setActiveIndex(0);
+                            }
+                        }, 800); // Wait for smooth scroll to finish
+                    } else {
+                        scrollToIndex(nextIndex);
+                    }
+                }
             }, 5000);
-        }
-        return () => clearInterval(interval);
-    }, [isAutoPlaying, currentIndex]);
+        };
 
-    // Marquee animation
-    useEffect(() => {
-        const marquee = marqueeRef.current;
-        if (marquee) {
-            gsap.to(marquee, {
-                xPercent: -50,
-                repeat: -1,
-                duration: 20,
-                ease: "none"
+        startAutoScroll();
+
+        // Drag to scroll variables
+        let isDragging = false;
+        let startY;
+        let scrollTop;
+
+        const handleMouseDown = (e) => {
+            isDragging = true;
+            scrollArea.classList.add('grabbing');
+            startY = e.pageY - scrollArea.offsetTop;
+            scrollTop = scrollArea.scrollTop;
+            setIsPaused(true);
+        };
+
+        const handleMouseLeave = () => {
+            isDragging = false;
+            scrollArea.classList.remove('grabbing');
+            setIsPaused(false);
+        };
+
+        const handleMouseUp = () => {
+            isDragging = false;
+            scrollArea.classList.remove('grabbing');
+            setIsPaused(false);
+
+            // Snap to nearest section after drag
+            const newIndex = Math.round(scrollArea.scrollTop / window.innerHeight);
+            scrollToIndex(newIndex);
+        };
+
+        const handleMouseMove = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const y = e.pageY - scrollArea.offsetTop;
+            const walk = (y - startY) * 1.5;
+            scrollArea.scrollTop = scrollTop - walk;
+        };
+
+        const handleWheel = () => {
+            setIsPaused(true);
+            clearTimeout(window.resumeScrollTimeout);
+            window.resumeScrollTimeout = setTimeout(() => {
+                setIsPaused(false);
+            }, 3000);
+        };
+
+        const handleScroll = () => {
+            const scrollArea = scrollAreaRef.current;
+            if (!scrollArea) return;
+
+            const scrollPos = scrollArea.scrollTop;
+            const totalHeight = projects.length * window.innerHeight;
+
+            // Seamless loop jump
+            if (scrollPos >= totalHeight) {
+                scrollArea.scrollTo({ top: 0, behavior: 'auto' });
+                setActiveIndex(0);
+                return;
+            }
+
+            const index = Math.round(scrollPos / window.innerHeight);
+            if (index !== activeIndex && index < projects.length) {
+                setActiveIndex(index);
+            }
+        };
+
+        scrollArea.addEventListener('mousedown', handleMouseDown);
+        scrollArea.addEventListener('mouseleave', handleMouseLeave);
+        scrollArea.addEventListener('mouseup', handleMouseUp);
+        scrollArea.addEventListener('mousemove', handleMouseMove);
+        scrollArea.addEventListener('wheel', handleWheel);
+        scrollArea.addEventListener('scroll', handleScroll);
+
+        return () => {
+            clearInterval(intervalId);
+            scrollArea.removeEventListener('mousedown', handleMouseDown);
+            scrollArea.removeEventListener('mouseleave', handleMouseLeave);
+            scrollArea.removeEventListener('mouseup', handleMouseUp);
+            scrollArea.removeEventListener('mousemove', handleMouseMove);
+            scrollArea.removeEventListener('wheel', handleWheel);
+            scrollArea.removeEventListener('scroll', handleScroll);
+            clearTimeout(window.resumeScrollTimeout);
+        };
+    }, [isPaused, activeIndex]);
+
+    const scrollToIndex = (index) => {
+        const target = projectRefs.current[index];
+        const scrollArea = scrollAreaRef.current;
+        if (target && scrollArea) {
+            scrollArea.scrollTo({
+                top: target.offsetTop,
+                behavior: 'smooth'
             });
+            setActiveIndex(index);
         }
+    };
+
+    useEffect(() => {
+        ScrollTrigger.getAll().forEach(t => t.kill());
+
+        const sections = gsap.utils.toArray('.vis-story-section');
+
+        sections.forEach((section) => {
+            const imageContainer = section.querySelector('.vis-story-image');
+            const image = section.querySelector('.vis-story-image img');
+            const content = section.querySelector('.vis-story-content');
+            const title = section.querySelector('.vis-story-title');
+            const desc = section.querySelector('.vis-story-desc');
+            const cat = section.querySelector('.vis-story-cat');
+
+            // 3D Cinematic Image Animation
+            gsap.fromTo(imageContainer,
+                {
+                    rotationX: 45,
+                    z: -500,
+                    opacity: 0,
+                    transformOrigin: "center bottom"
+                },
+                {
+                    rotationX: 0,
+                    z: 0,
+                    opacity: 1,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top bottom",
+                        end: "top center",
+                        scrub: true,
+                        scroller: ".vis-scroll-area"
+                    }
+                }
+            );
+
+            gsap.to(imageContainer, {
+                rotationX: -45,
+                z: -500,
+                opacity: 0,
+                transformOrigin: "center top",
+                ease: "power2.in",
+                scrollTrigger: {
+                    trigger: section,
+                    start: "bottom center",
+                    end: "bottom top",
+                    scrub: true,
+                    scroller: ".vis-scroll-area"
+                }
+            });
+
+            // Inner Image Parallax & Scale
+            gsap.fromTo(image,
+                { scale: 1.5 },
+                {
+                    scale: 1,
+                    duration: 2,
+                    ease: "expo.out",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 80%",
+                        toggleActions: "play none none reverse",
+                        scroller: ".vis-scroll-area"
+                    }
+                }
+            );
+
+            // 3D Content Animation
+            gsap.fromTo(content,
+                { rotationX: 20, z: -200, opacity: 0 },
+                {
+                    rotationX: 0, z: 0, opacity: 1,
+                    duration: 1.5,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 70%",
+                        toggleActions: "play none none reverse",
+                        scroller: ".vis-scroll-area"
+                    }
+                }
+            );
+
+            // Text Entrance Animations
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 60%",
+                    toggleActions: "play none none reverse",
+                    scroller: ".vis-scroll-area"
+                }
+            });
+
+            tl.fromTo(cat, { opacity: 0, y: 20, filter: "blur(5px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6 })
+                .fromTo(title, { opacity: 0, y: 30, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.8 }, "-=0.4")
+                .fromTo(desc, { opacity: 0, y: 20, filter: "blur(5px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6 }, "-=0.4");
+        });
+
+        return () => ScrollTrigger.getAll().forEach(t => t.kill());
     }, []);
 
-    // Slide transition animation
-    useEffect(() => {
-        const tl = gsap.timeline();
-
-        // Reset progress bar
-        gsap.set(progressRef.current, { scaleX: 0 });
-
-        tl.fromTo(titleRef.current,
-            { y: 50, opacity: 0, skewY: 7 },
-            { y: 0, opacity: 1, skewY: 0, duration: 1, ease: 'expo.out' }
-        )
-            .fromTo(imageRef.current,
-                { scale: 1.1, opacity: 0 },
-                { scale: 1, opacity: 1, duration: 1.5, ease: 'expo.out' },
-                '-=0.8'
-            )
-            .to(progressRef.current, {
-                scaleX: 1,
-                duration: 5,
-                ease: 'none'
-            }, 0);
-
-    }, [currentIndex]);
-
-    const nextSlide = () => {
-        setCurrentIndex((prev) => (prev + 1) % projects.length);
-    };
-
-    const prevSlide = () => {
-        setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
-    };
-
-    const goToSlide = (index) => {
-        setCurrentIndex(index);
-        setIsAutoPlaying(false); // Pause auto-play on manual interaction
-        setTimeout(() => setIsAutoPlaying(true), 10000); // Resume after 10s
-    };
-
-    const activeProject = projects[currentIndex];
-
     return (
-        <div className="vis-dynamic-container">
-            {/* Background Marquee */}
-            <div className="vis-marquee-container">
-                <div className="vis-marquee-wrapper" ref={marqueeRef}>
-                    <span className="vis-marquee-text">VISUALISATION • RENDERING • ARCHITECTURE • DESIGN • </span>
-                    <span className="vis-marquee-text">VISUALISATION • RENDERING • ARCHITECTURE • DESIGN • </span>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="vis-main-layout">
-                <div className="vis-left-panel">
-                    <div className="vis-info-box">
-                        <span className="vis-category">{activeProject.category}</span>
-                        <div className="vis-title-reveal">
-                            <h1 className="vis-title" ref={titleRef}>{activeProject.title}</h1>
-                        </div>
-                        <div className="vis-meta">
-                            <span className="vis-year">{activeProject.year}</span>
-                            <div className="vis-divider"></div>
-                            <span className="vis-index">0{currentIndex + 1} / 0{projects.length}</span>
-                        </div>
-                    </div>
-
-                    <div className="vis-controls">
-                        <button className="vis-nav-btn" onClick={prevSlide}>PREV</button>
-                        <div className="vis-progress-container">
-                            <div className="vis-progress-bar" ref={progressRef}></div>
-                        </div>
-                        <button className="vis-nav-btn" onClick={nextSlide}>NEXT</button>
-                    </div>
-                </div>
-
-                <div className="vis-right-panel">
-                    <div className="vis-image-container">
-                        <img
-                            ref={imageRef}
-                            src={activeProject.image}
-                            alt={activeProject.title}
-                            className="vis-featured-image"
-                        />
-                        <div className="vis-image-overlay"></div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Thumbnails / Indicators */}
-            <div className="vis-thumbnails">
-                {projects.map((p, i) => (
-                    <div
-                        key={p.id}
-                        className={`vis-thumb-item ${i === currentIndex ? 'active' : ''}`}
-                        onClick={() => goToSlide(i)}
+        <div className="vis-story-container">
+            <div
+                className="vis-scroll-area"
+                ref={scrollAreaRef}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+            >
+                {/* Render projects + a clone of the first one for seamless loop */}
+                {[...projects, projects[0]].map((project, index) => (
+                    <section
+                        key={`${project.id}-${index}`}
+                        className="vis-story-section"
+                        ref={el => projectRefs.current[index] = el}
                     >
-                        <div className="vis-thumb-line"></div>
-                        <span className="vis-thumb-num">0{i + 1}</span>
-                    </div>
+                        <div className="vis-story-image">
+                            <img src={project.image} alt={project.title} />
+                            <div className="vis-story-overlay"></div>
+                        </div>
+
+                        <div className="vis-story-content">
+                            <span className="vis-story-cat">{project.category}</span>
+                            <h2 className="vis-story-title">{project.title}</h2>
+                            <p className="vis-story-desc">{project.description}</p>
+                            <div className="vis-story-footer">
+                                <span className="vis-story-index">
+                                    {((index % projects.length) + 1).toString().padStart(2, '0')}
+                                </span>
+                                <div className="vis-story-line"></div>
+                            </div>
+                        </div>
+                    </section>
                 ))}
+            </div>
+
+            {/* Fixed Navigation/Logo Overlay */}
+            <div className="vis-story-fixed">
+
+
+                <div className="vis-story-nav">
+                    {projects.map((_, i) => (
+                        <button
+                            key={i}
+                            className={`vis-nav-dot ${activeIndex === i ? 'active' : ''}`}
+                            onClick={() => scrollToIndex(i)}
+                            aria-label={`Go to project ${i + 1}`}
+                        >
+                            <span className="dot-label">{(i + 1).toString().padStart(2, '0')}</span>
+                        </button>
+                    ))}
+                </div>
+
+
             </div>
         </div>
     );

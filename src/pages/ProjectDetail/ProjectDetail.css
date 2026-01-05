@@ -98,6 +98,13 @@
     font-weight: 300;
 }
 
+.project-actions {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
 .inquire-link {
     display: inline-flex;
     align-items: center;
@@ -117,10 +124,31 @@
     gap: 20px;
 }
 
+.contact-project-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 12px 30px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 2px;
+}
+
+.contact-project-btn:hover {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
 .hero-image-container {
     aspect-ratio: 4/5;
-    height:30rem;
-    width:30rem;
+    height: 30rem;
+    width: 30rem;
     overflow: hidden;
     background: #0a0a0a;
     border-radius: 2px;

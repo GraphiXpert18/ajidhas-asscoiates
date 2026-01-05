@@ -9,7 +9,6 @@ import './Collaboration.css';
 import arch1 from '../../assets/arch_project_1.png';
 import arch2 from '../../assets/arch_project_2.png';
 import villa1 from '../../assets/villa_lumiere.png';
-import buildingNight from '../../assets/building_night.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,7 +18,7 @@ const collabData = [
         title: "to the unknown",
         subtitle: "AND BACK",
         desc: "A collaborative journey into the depths of architectural surrealism, where boundaries between space and time dissolve into pure form.",
-        image: buildingNight,
+        image: villa1,
         label: "BEYOND LIMITS"
     },
     {

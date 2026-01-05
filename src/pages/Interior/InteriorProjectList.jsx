@@ -75,7 +75,7 @@ const InteriorProjectList = () => {
             .to('.intro-img-box:not(.center-img)', {
                 opacity: 0,
                 scale: 0.8,
-                duration: 0.4,
+                duration: 0.2,
                 ease: 'power2.out'
             }, '+=0.1')
             .to('.intro-img-box.center-img', {
@@ -89,7 +89,7 @@ const InteriorProjectList = () => {
                 zIndex: 10,
                 duration: 1,
                 ease: 'expo.inOut'
-            }, '-=0.4')
+            }, '-=0.2')
 
             // Reveal BG Image (behind the expanded intro image)
             .to('.ipl-bg-image', { opacity: 1, duration: 0.1 }, '-=0.1')
@@ -97,7 +97,7 @@ const InteriorProjectList = () => {
             // 4. Reveal Main Content
             .fromTo('.ipl-content-wrapper',
                 { opacity: 0 },
-                { opacity: 1, duration: 0.8 },
+                { opacity: 1, duration: 0.2 },
                 '-=0.2'
             )
             // Text Animations

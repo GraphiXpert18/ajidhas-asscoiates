@@ -153,11 +153,9 @@ const ProjectPreview = () => {
 
             <footer className="preview-footer">
                 <div className="footer-meta">
-                    <span>{project.year} © AJIDHAS ASSOCIATES</span>
+                    <span>{project.year} AJIDHAS ASSOCIATES</span>
                 </div>
-                <div className="scroll-hint">
-                    <span>Hover to sharpen • Click to view</span>
-                </div>
+               
             </footer>
         </div>
     );

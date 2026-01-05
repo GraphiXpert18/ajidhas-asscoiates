@@ -118,10 +118,15 @@ const ProjectDetail = () => {
                         </div>
                     </div>
                     <p className="project-description">{project.description}</p>
-                    <a href="mailto:ajidhas@gmail.com" className="inquire-link">
-                        <IoMailOutline />
-                        <span>Inquire about this series</span>
-                    </a>
+                    <div className="project-actions">
+                        <a href="mailto:ajidhas@gmail.com" className="inquire-link">
+                            <IoMailOutline />
+                            <span>Inquire about this series</span>
+                        </a>
+                        <button className="contact-project-btn" onClick={() => navigate('/architecture/contact')}>
+                            Contact Us
+                        </button>
+                    </div>
                 </div>
                 <div className="hero-image-container">
                     <img src={project.mainImage} alt={project.title} />
