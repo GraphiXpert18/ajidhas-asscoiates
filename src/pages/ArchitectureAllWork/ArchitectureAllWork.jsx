@@ -207,9 +207,7 @@ const ArchitectureAllWork = () => {
                 {selectedProject && (
                     <>
                         <img src={selectedProject.image} alt="bg" className="aw-modal-bg" />
-                        <button className="aw-modal-close" onClick={handleCloseModal}>
-                            <IoClose />
-                        </button>
+                       
                         <div className="aw-modal-content">
                             <div className="aw-modal-inner">
                                 <div className="aw-modal-image-container" ref={modalImgRef}>

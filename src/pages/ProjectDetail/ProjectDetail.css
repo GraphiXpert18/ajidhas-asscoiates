@@ -306,11 +306,12 @@
     .gallery-grid-detail {
         grid-template-columns: 1fr;
         grid-auto-rows: 400px;
+        
     }
 
     .gallery-grid-item.item-0,
     .gallery-grid-item.item-1,
     .gallery-grid-item.item-2 {
-        grid-column: span 1;
+        grid-row: span 1;
     }
 }

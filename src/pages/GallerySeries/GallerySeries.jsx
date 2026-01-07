@@ -27,7 +27,7 @@ const GallerySeries = () => {
         <div className="gallery-page-container">
             <header className="gallery-header">
                 <div className="header-text">
-                    <span className="header-label">Curated Collection</span>
+                    <span className="header-label">Gallery</span>
                     <h1 className="header-title">Artistic Series</h1>
                 </div>
             </header>

@@ -39,7 +39,7 @@
     z-index: 10;
     max-width: 1400px;
     margin: 0 auto;
-    padding: clamp(100px, 15vh, 200px) 8% 100px;
+    padding: clamp(100px, 15vh, 20px) 8% 100px;
 }
 
 .contact-content {

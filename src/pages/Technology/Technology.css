@@ -301,4 +301,34 @@
     .tech-page-title h1 {
         font-size: 3rem;
     }
+}@media (max-width: 720px) {
+    .tech-back-btn {
+        width: 44px;
+        height: 44px;
+        top: 20px;
+        left: 20px;
+    }
+
+    .initial-card {
+        width: 300px;
+        height: 400px;
+    }
+
+    .initial-card-text h2 {
+        font-size: 2rem;
+    }
+
+    .tech-marquee-item {
+        min-width: 220px;
+        height: 300px;
+    }
+
+    .tech-main-img {
+        width: 220px;
+    }
+
+    .tech-page-title h1 {
+        font-size: 3rem;
+        padding-left: 12rem;
+    }
 }

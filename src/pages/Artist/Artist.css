@@ -269,17 +269,24 @@
 }
 
 @media (max-width: 768px) {
+    .artist-profile-img {
+        height: 90%;
+    }
     .artist-page {
         padding: 120px 0 80px;
     }
 
     .artist-stats {
         flex-wrap: wrap;
-        gap: 40px;
+        gap: 4px;
+        flex-direction: row;
+    }.stat-number {
+        font-size: 3rem;
     }
 
     .stat-item {
         flex: 1 1 140px;
+       
     }
 
     .section-title {

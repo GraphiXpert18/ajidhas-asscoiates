@@ -280,11 +280,18 @@
 @media (max-width: 768px) {
     .about-v2-left {
         padding: 60px 8% 20px;
+        padding-top: 10rem;
     }
-
+   
     .member-name-title {
         font-size: 2.8rem;
     }
+    .member-role-tag {
+        font-size: 0.65rem;
+        margin-top:5.5rem;
+       
+    }
+   
 
     .member-bio-text {
         font-size: 1rem;
@@ -304,4 +311,5 @@
         width: 220px;
         height: 300px;
     }
+    
 }

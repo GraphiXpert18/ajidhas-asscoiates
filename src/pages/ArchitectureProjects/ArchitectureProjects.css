@@ -251,4 +251,5 @@
         grid-column: 1;
         justify-content: flex-start;
     }
+    .coords{padding-top: 1.8rem;}
 }

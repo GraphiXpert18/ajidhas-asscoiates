@@ -371,3 +371,22 @@
         margin-top: -175px;
     }
 }
+@media (max-width: 720px) {
+   .aw-title {
+       font-size: 2.5rem;
+       padding-left: 2.5rem;
+   }
+  .aw-modal{margin-top: 4rem;
+margin-bottom: 3rem;}
+
+.aw-modal-meta {
+    flex-direction: row;
+}
+.aw-meta-item {
+    flex-direction: row;
+}
+.aw-meta-item p {
+    margin-left: 8px;
+}
+
+}

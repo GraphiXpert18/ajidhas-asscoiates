@@ -138,8 +138,8 @@
 
 @media (max-width: 768px) {
     .footer {
-        padding: 4rem 1.5rem 2rem;
-    }
+        padding: 3rem 1.5rem 2rem;
+        }
 
     .footer-content {
         grid-template-columns: 1fr;
@@ -148,7 +148,7 @@
     }
 
     .footer-bottom {
-        flex-direction: column;
+        flex-direction: row;
         gap: 1.5rem;
         text-align: center;
     }

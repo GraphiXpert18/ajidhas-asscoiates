@@ -254,7 +254,11 @@
 
     .collab-hero-title {
         letter-spacing: -3px;
-        font-size: 5rem;
+        font-size: 3.5rem;
+        padding-top: 50%;
+    }
+    .collab-label-tag {
+        padding-top: 60%;
     }
 
     .collab-bottom-ui {

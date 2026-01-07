@@ -156,6 +156,10 @@
         padding: 3rem 1.5rem;
         gap: 3rem;
     }
+    .arch-header h1 {
+        font-size: 3.5rem;
+        margin-top: 1.2rem;
+    }
 
     .arch-grid {
         grid-template-columns: 1fr;

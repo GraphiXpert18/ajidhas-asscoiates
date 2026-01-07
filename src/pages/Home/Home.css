@@ -152,8 +152,12 @@
 }
 
 @media (max-width: 768px) {
+    .hero-content-new h1 {
+        font-size: 4.5rem;
+    }
+    
     .hero-buttons {
-        flex-direction: column;
+        flex-direction: row;
         gap: 20px;
         width: 100%;
         max-width: 280px;
