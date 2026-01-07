@@ -161,6 +161,25 @@
         gap: 20px;
         width: 100%;
         max-width: 280px;
+        margin: 0 2rem;;
+    }
+
+    .hero-btn {
+        width: 100%;
+        padding: 15px 30px;
+    }
+}
+@media (max-width: 600px) {
+    .hero-content-new h1 {
+        font-size: 4.5rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: row;
+        gap: 20px;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 2rem;;
     }
 
     .hero-btn {
