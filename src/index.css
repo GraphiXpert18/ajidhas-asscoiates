@@ -40,9 +40,12 @@ body {
 }
 
 /* Hide native vertical scrollbar visually but keep scrolling functional */
-html, body {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
+html,
+body {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
 }
 
 body::-webkit-scrollbar {

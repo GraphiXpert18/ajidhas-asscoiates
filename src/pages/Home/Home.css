@@ -2,7 +2,6 @@
     width: 100%;
     min-height: 100vh;
     position: relative;
-    overflow: hidden;
 }
 
 .home-background {
@@ -49,8 +48,17 @@
     align-items: center;
     text-align: center;
     padding: 2rem;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     z-index: 1;
+    pointer-events: none;
+}
+
+.hero-content-new,
+.hero-buttons {
+    pointer-events: auto;
 }
 
 .hero-content-new {
@@ -58,7 +66,7 @@
 }
 
 .hero-content-new h1 {
-    font-size:7rem;
+    font-size: 7rem;
     font-weight: 1500;
     color: var(--color-white);
     margin-bottom: 10px;
@@ -155,13 +163,13 @@
     .hero-content-new h1 {
         font-size: 4.5rem;
     }
-    
+
     .hero-buttons {
         flex-direction: row;
         gap: 20px;
         width: 100%;
         max-width: 280px;
-        margin: 0 2rem;;
+        margin: 0 2rem;
     }
 
     .hero-btn {
@@ -169,21 +177,195 @@
         padding: 15px 30px;
     }
 }
+
 @media (max-width: 600px) {
     .hero-content-new h1 {
         font-size: 4.5rem;
     }
-    
+
     .hero-buttons {
         flex-direction: row;
         gap: 20px;
         width: 100%;
         max-width: 280px;
-        margin: 0 2rem;;
+        margin: 0 2rem;
     }
 
     .hero-btn {
         width: 100%;
         padding: 15px 30px;
     }
+}
+
+/* Intro Animation */
+.intro-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #050505;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 1;
+}
+
+.intro-bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    opacity: 0;
+}
+
+.intro-text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.intro-text {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 500;
+    color: var(--color-black);
+   
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    opacity: 0;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.intro-text-ajidhas {
+   
+    width: 100%;
+    padding-top: 10%;
+    padding-left: 10%;
+}
+
+.intro-text-associates {
+   
+    width: 100%;
+    padding-left: 70%;
+    padding-bottom: 20%;
+}
+
+@media (max-width: 768px) {
+    .intro-text {
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        letter-spacing: 0.15em;
+    }
+
+    .intro-text-ajidhas,
+    .intro-text-associates {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
+
+.scroll-spacer {
+    position: relative;
+    width: 100%;
+    height: 200vh;
+    z-index: -1;
+    visibility: hidden;
+}
+
+.building-split-container {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 80vh;
+    width: auto;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.ghost-building {
+    height: 100%;
+    width: auto;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.building-half {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    overflow: hidden;
+}
+
+.building-half.left {
+    left: 0;
+}
+
+.building-half.right {
+    right: 0;
+}
+
+.building-half img {
+    height: 100%;
+    width: 200%;
+    max-width: none;
+    position: absolute;
+    top: 0;
+    object-fit: contain;
+}
+
+.building-half.left img {
+    left: 0;
+}
+
+.building-half.right img {
+    left: -100%;
+}
+
+.intro-cloud {
+    position: absolute;
+    top: 20%;
+    width: 30vw;
+    max-width: 600px;
+    height: auto;
+    z-index: 4;
+    opacity: 0;
+}
+
+.intro-cloud.left {
+    left: 0;
+}
+
+.intro-cloud.right {
+    right: 0;
+}
+
+.intro-ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 57vh;
+    object-fit: cover;
+    z-index: 8;
+    opacity: 0;
+    pointer-events: none;
 }
