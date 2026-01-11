@@ -50,8 +50,8 @@ const Home = () => {
             )
             // Building rises from bottom
             .fromTo(buildingRef.current,
-                { y: '100%', opacity: 0 },
-                { y: '0%', opacity: 1, duration: 1.8, ease: 'power3.out' },
+                { y: '100%', xPercent: -50, opacity: 0 },
+                { y: '0%', xPercent: -50, opacity: 1, duration: 1.8, ease: 'power3.out' },
                 '-=1.2'
             )
             // Text animations - AJIDHAS from right, ASSOCIATES from left
@@ -105,7 +105,7 @@ const Home = () => {
 
         scrollTl
             // Zoom and split building
-            .to(buildingRef.current, { scale: 3, duration: 2, ease: "power2.inOut" })
+            .to(buildingRef.current, { scale: 3, xPercent: -50, duration: 2, ease: "power2.inOut" })
             .to(leftHalfRef.current, { x: '-60%', duration: 2, ease: "power2.inOut" }, "<")
             .to(rightHalfRef.current, { x: '60%', duration: 2, ease: "power2.inOut" }, "<")
             // Fade out text
