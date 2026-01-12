@@ -4,11 +4,12 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Home.css';
 
-import buildingNight from '../../assets/building_night.png';
-import openingBuilding from '../../assets/opening_building.png';
+
+import waitingHall from '../../assets/waiting_hall.png';
+import openingBuilding from '../../assets/opening_buildingg.png';
 import openingCloud from '../../assets/opening_cloud.png';
 import openingGround from '../../assets/opening_ground.png';
-import introBg from '../../assets/intro_bg.jpg';
+import introBg from '../../assets/intro_bg_v2.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,14 +19,13 @@ const Home = () => {
     const buttonsRef = useRef(null);
     const introRef = useRef(null);
     const buildingRef = useRef(null);
-    const leftHalfRef = useRef(null);
-    const rightHalfRef = useRef(null);
     const cloudLeftRef = useRef(null);
     const cloudRightRef = useRef(null);
     const introBgRef = useRef(null);
     const textAjidhasRef = useRef(null);
     const textAssociatesRef = useRef(null);
     const groundRef = useRef(null);
+    const bgImageRef = useRef(null);
     const navigate = useNavigate();
     const [introFinished, setIntroFinished] = useState(false);
 
@@ -37,59 +37,59 @@ const Home = () => {
 
         // Phase 1: Intro Animation (Auto)
         tl.set(introRef.current, { opacity: 1 })
-            // Fade in background
+            // 1. Background: Cinematic scale down + fade in
             .fromTo(introBgRef.current,
-                { opacity: 0 },
-                { opacity: 1, duration: 1, ease: 'power2.inOut' }
+                { opacity: 0, scale: 1.15 },
+                { opacity: 1, scale: 1, duration: 2.5, ease: 'power2.out' }
             )
-            // Ground rises slightly
+            // 2. Ground: Rises smoothly
             .fromTo(groundRef.current,
-                { y: '30%', opacity: 0 },
-                { y: '0%', opacity: 1, duration: 1.5, ease: 'power2.out' },
-                '-=1.0'
+                { y: '40%', opacity: 0 },
+                { y: '0%', opacity: 1, duration: 1.8, ease: 'power3.out' },
+                '-=2.0'
             )
-            // Building rises from bottom
+            // 3. Building: Rises with a slight scale up for impact
             .fromTo(buildingRef.current,
-                { y: '100%', xPercent: -50, opacity: 0 },
-                { y: '0%', xPercent: -50, opacity: 1, duration: 1.8, ease: 'power3.out' },
-                '-=1.2'
+                { y: '100%', xPercent: -50, opacity: 0, scale: 0.9 },
+                { y: '0%', xPercent: -50, opacity: 1, scale: 1, duration: 2, ease: 'power4.out' },
+                '-=1.6'
             )
-            // Text animations - AJIDHAS from right, ASSOCIATES from left
+            // 4. Text: Cinematic blur reveal + slide
             .fromTo(textAjidhasRef.current,
-                { x: '100%', opacity: 0 },
-                { x: '0%', opacity: 1, duration: 1.5, ease: 'power3.out' },
-                '-=1.2'
-            )
-            .fromTo(textAssociatesRef.current,
-                { x: '-100%', opacity: 0 },
-                { x: '0%', opacity: 1, duration: 1.5, ease: 'power3.out' },
+                { x: '100px', opacity: 0, filter: 'blur(15px)' },
+                { x: '0%', opacity: 1, filter: 'blur(0px)', duration: 1.8, ease: 'power3.out' },
                 '-=1.5'
             )
-            // Clouds enter from sides
+            .fromTo(textAssociatesRef.current,
+                { x: '-100px', opacity: 0, filter: 'blur(15px)' },
+                { x: '0%', opacity: 1, filter: 'blur(0px)', duration: 1.8, ease: 'power3.out' },
+                '-=1.6'
+            )
+            // 5. Clouds: Soft entry
             .fromTo(cloudLeftRef.current,
-                { x: '-100%', opacity: 0 },
-                { x: '10%', opacity: 1, duration: 2, ease: 'power2.out' },
-                '-=1.4'
+                { x: '-50%', opacity: 0 },
+                { x: '10%', opacity: 1, duration: 3, ease: 'power2.out' },
+                '-=2.5'
             )
             .fromTo(cloudRightRef.current,
-                { x: '100%', opacity: 0 },
-                { x: '-10%', opacity: 1, duration: 2, ease: 'power2.out' },
-                '-=2'
+                { x: '50%', opacity: 0 },
+                { x: '-10%', opacity: 1, duration: 3, ease: 'power2.out' },
+                '-=3.0'
             )
-            // Pause for a moment
-            .to({}, { duration: 0.8 })
+            // Pause for a moment to let the user absorb the scene
+            .to({}, { duration: 0.5 })
             // Enable scroll
             .call(() => {
                 document.body.style.overflow = 'auto';
             });
 
-        // Phase 2: Scroll Animation (Split & Zoom)
+        // Phase 2: Scroll Animation (Cinematic Entry)
         const scrollTl = gsap.timeline({
             scrollTrigger: {
                 trigger: ".scroll-spacer",
                 start: "top top",
                 end: "bottom bottom",
-                scrub: 1,
+                scrub: 1.5, // Smoother scrubbing for a weighty feel
                 onEnter: () => {
                     // Ensure scroll is enabled
                     document.body.style.overflow = 'auto';
@@ -104,32 +104,64 @@ const Home = () => {
         });
 
         scrollTl
-            // Zoom and split building
-            .to(buildingRef.current, { scale: 3, xPercent: -50, duration: 2, ease: "power2.inOut" })
-            .to(leftHalfRef.current, { x: '-60%', duration: 2, ease: "power2.inOut" }, "<")
-            .to(rightHalfRef.current, { x: '60%', duration: 2, ease: "power2.inOut" }, "<")
-            // Fade out text
+            // 1. Clear the view: Text fades out and moves up quickly with blur
             .to([textAjidhasRef.current, textAssociatesRef.current], {
                 opacity: 0,
-                y: -50,
-                duration: 1.5
+                y: -100,
+                filter: 'blur(20px)', // Cinematic blur out
+                duration: 1,
+                ease: "power2.in"
+            })
+            // 2. Clouds part ways dramatically
+            .to(cloudLeftRef.current, {
+                x: '-150%',
+                opacity: 0,
+                scale: 1.5, // Clouds get closer as they move out
+                duration: 1.5,
+                ease: "power2.in"
             }, "<")
-            // Fade out clouds
-            .to([cloudLeftRef.current, cloudRightRef.current], {
+            .to(cloudRightRef.current, {
+                x: '150%',
                 opacity: 0,
                 scale: 1.5,
-                duration: 1.5
+                duration: 1.5,
+                ease: "power2.in"
             }, "<")
-            // Fade out background, ground and overlay
-            .to(groundRef.current, { y: '10%', opacity: 0, duration: 1.5 }, "<")
-            .to(introBgRef.current, { opacity: 0, duration: 1.5 }, "<0.5")
+            // 3. The Approach: Building and Ground zoom together
+            // We want to simulate walking INTO the building.
+            .to(buildingRef.current, {
+                scale: 18, // Massive zoom to go "through" it
+                yPercent: 40, // Adjust to aim at the door/center
+                transformOrigin: "center 85%", // Zoom towards the entrance level
+                filter: 'blur(10px)', // Motion blur as we get close
+                opacity: 0, // Fade out at the very end
+                duration: 3,
+                ease: "expo.in" // Slow start, fast finish (acceleration)
+            }, "<0.2") // Start slightly after text clears
+            .to(groundRef.current, {
+                scale: 12,
+                y: '10%',
+                transformOrigin: "center bottom",
+                filter: 'blur(10px)',
+                opacity: 0,
+                duration: 3,
+                ease: "expo.in"
+            }, "<")
+            // 4. Background Transition
+            .to(introBgRef.current, {
+                scale: 1.5, // Background also zooms a bit
+                opacity: 0,
+                duration: 2.5,
+                ease: "power2.in"
+            }, "<")
+            // 5. Final cleanup
             .to(introRef.current, {
                 backgroundColor: 'rgba(5, 5, 5, 0)',
-                duration: 1.5,
+                duration: 0.5,
                 onComplete: () => {
                     gsap.set(introRef.current, { display: 'none' });
                 }
-            }, "<0.5");
+            }, "-=0.5");
 
         return () => {
             // Cleanup
@@ -143,33 +175,83 @@ const Home = () => {
 
         const tl = gsap.timeline();
 
-        // Hero Text Reveal
+        // Hero Text Reveal (Title & Subtitle)
+        // Cinematic rise with blur removal
         tl.fromTo(
             textRef.current.children,
-            { y: 100, opacity: 0 },
+            { y: 100, opacity: 0, filter: 'blur(20px)' },
             {
                 y: 0,
                 opacity: 1,
-                duration: 1.2,
-                stagger: 0.15,
-                ease: 'power3.out',
-                delay: 0.3,
+                filter: 'blur(0px)',
+                duration: 1.5,
+                stagger: 0.2,
+                ease: 'power4.out',
+                delay: 0.2,
             }
         );
 
-        // Buttons Reveal
+        // Buttons Reveal (Art & Architecture)
+        // Pop in with a slight overshoot for a premium feel
         tl.fromTo(
             buttonsRef.current.children,
-            { y: 50, opacity: 0 },
+            { y: 60, opacity: 0, scale: 0.8, filter: 'blur(10px)' },
             {
                 y: 0,
                 opacity: 1,
-                duration: 0.8,
-                stagger: 0.2,
-                ease: 'power3.out',
+                scale: 1,
+                filter: 'blur(0px)',
+                duration: 1.2,
+                stagger: 0.2, // One after another
+                ease: 'back.out(1.2)', // Subtle bounce
             },
-            '-=0.4'
+            '-=1.0' // Start before text finishes
         );
+    }, [introFinished]);
+
+    useEffect(() => {
+        if (!introFinished) return;
+
+        const handleMouseMove = (e) => {
+            const { clientX, clientY } = e;
+            const x = (clientX / window.innerWidth) - 0.5;
+            const y = (clientY / window.innerHeight) - 0.5;
+
+            // Tilt Text
+            gsap.to(textRef.current, {
+                rotationY: x * 20, // Rotate horizontally based on mouse X
+                rotationX: -y * 20, // Rotate vertically based on mouse Y
+                x: x * 30, // Parallax movement
+                y: y * 30,
+                duration: 1,
+                ease: 'power2.out'
+            });
+
+            // Tilt Buttons (slightly different intensity for depth)
+            gsap.to(buttonsRef.current, {
+                rotationY: x * 30,
+                rotationX: -y * 30,
+                x: x * 50,
+                y: y * 50,
+                duration: 1,
+                ease: 'power2.out'
+            });
+
+            // Animate Background (Parallax - moves opposite to mouse)
+            gsap.to(bgImageRef.current, {
+                x: -x * 20,
+                y: -y * 20,
+                scale: 1.1, // Keep it slightly scaled up to avoid edges showing
+                duration: 1.5,
+                ease: 'power2.out'
+            });
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
     }, [introFinished]);
 
     return (
@@ -191,22 +273,15 @@ const Home = () => {
 
                 <img src={openingGround} alt="Ground" className="intro-ground" ref={groundRef} />
 
-                <div className="building-split-container" ref={buildingRef}>
-                    {/* Ghost image to set size */}
-                    <img src={openingBuilding} alt="" className="ghost-building" />
-
-                    <div className="building-half left" ref={leftHalfRef}>
-                        <img src={openingBuilding} alt="Building Left" />
-                    </div>
-                    <div className="building-half right" ref={rightHalfRef}>
-                        <img src={openingBuilding} alt="Building Right" />
-                    </div>
+                <div className="building-container" ref={buildingRef}>
+                    <img src={openingBuilding} alt="Building" className="intro-building" />
                 </div>
             </div>
 
             <div className="home-background">
                 <img
-                    src={buildingNight}
+                    ref={bgImageRef}
+                    src={waitingHall}
                     alt="Background"
                     className="bg-slide active"
                 />
