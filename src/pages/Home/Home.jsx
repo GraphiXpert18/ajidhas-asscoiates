@@ -6,10 +6,11 @@ import './Home.css';
 
 
 import waitingHall from '../../assets/waiting_hall.png';
-import openingBuilding from '../../assets/opening_buildingg.png';
+import openingBuilding from '../../assets/building1.png';
 import openingCloud from '../../assets/opening_cloud.png';
-import openingGround from '../../assets/opening_ground.png';
-import introBg from '../../assets/intro_bg_v2.png';
+
+import introBg from '../../assets/bg1.jpeg';
+import penthouseReveal from '../../assets/penthouse_reveal.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,10 +25,16 @@ const Home = () => {
     const introBgRef = useRef(null);
     const textAjidhasRef = useRef(null);
     const textAssociatesRef = useRef(null);
-    const groundRef = useRef(null);
+
     const bgImageRef = useRef(null);
+    const penthouseImageRef = useRef(null);
+    const penthouseCloudLeftRef = useRef(null);
+    const penthouseCloudRightRef = useRef(null);
+    const penthouseTextLeftRef = useRef(null);
+    const penthouseTextRightRef = useRef(null);
     const navigate = useNavigate();
     const [introFinished, setIntroFinished] = useState(false);
+    const [showPenthouse, setShowPenthouse] = useState(false);
 
     useEffect(() => {
         // Disable scroll initially
@@ -42,12 +49,7 @@ const Home = () => {
                 { opacity: 0, scale: 1.15 },
                 { opacity: 1, scale: 1, duration: 2.5, ease: 'power2.out' }
             )
-            // 2. Ground: Rises smoothly
-            .fromTo(groundRef.current,
-                { y: '40%', opacity: 0 },
-                { y: '0%', opacity: 1, duration: 1.8, ease: 'power3.out' },
-                '-=2.0'
-            )
+
             // 3. Building: Rises with a slight scale up for impact
             .fromTo(buildingRef.current,
                 { y: '100%', xPercent: -50, opacity: 0, scale: 0.9 },
@@ -95,7 +97,62 @@ const Home = () => {
                     document.body.style.overflow = 'auto';
                 },
                 onLeave: () => {
-                    setIntroFinished(true);
+                    document.body.style.overflow = 'hidden';
+                    setShowPenthouse(true);
+
+                    const penthouseTl = gsap.timeline({
+                        onComplete: () => {
+                            setIntroFinished(true);
+                            setShowPenthouse(false);
+                            document.body.style.overflow = 'auto';
+                        }
+                    });
+
+                    // 1. Initial state
+                    penthouseTl.set([penthouseCloudLeftRef.current, penthouseCloudRightRef.current], { opacity: 0 });
+                    penthouseTl.set(penthouseImageRef.current, { scale: 1 });
+
+                    // 2. Full Cinematic Zoom (4s)
+                    penthouseTl.to(penthouseImageRef.current, {
+                        scale: 2.5,
+                        filter: 'brightness(1.1) contrast(1.05)',
+                        duration: 4,
+                        ease: 'power2.inOut'
+                    });
+
+                    // 3. Reveal Text and Clouds (3s) - Sequential and Smooth
+                    penthouseTl.fromTo([penthouseTextLeftRef.current, penthouseTextRightRef.current],
+                        { y: 50, opacity: 0, filter: 'blur(20px)' },
+                        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 2, stagger: 0.3, ease: 'power3.out' },
+                        '>-0.5'
+                    );
+
+                    penthouseTl.fromTo(penthouseCloudLeftRef.current,
+                        { x: '-150%', opacity: 0, filter: 'blur(20px)' },
+                        { x: '-10%', opacity: 0.6, filter: 'blur(5px)', duration: 3, ease: 'power3.out' },
+                        '<'
+                    );
+
+                    penthouseTl.fromTo(penthouseCloudRightRef.current,
+                        { x: '150%', opacity: 0, filter: 'blur(20px)' },
+                        { x: '10%', opacity: 0.6, filter: 'blur(5px)', duration: 3, ease: 'power3.out' },
+                        '<'
+                    );
+
+                    // 4. Soft Exit
+                    penthouseTl.to([penthouseCloudLeftRef.current, penthouseCloudRightRef.current, penthouseTextLeftRef.current, penthouseTextRightRef.current], {
+                        opacity: 0,
+                        y: -30,
+                        duration: 1.5,
+                        ease: 'power2.in'
+                    }, '+=1');
+
+                    penthouseTl.to(penthouseImageRef.current, {
+                        opacity: 0,
+                        scale: 2.7,
+                        duration: 1.5,
+                        ease: 'power2.in'
+                    }, '<');
                 },
                 onLeaveBack: () => {
                     setIntroFinished(false);
@@ -127,7 +184,7 @@ const Home = () => {
                 duration: 1.5,
                 ease: "power2.in"
             }, "<")
-            // 3. The Approach: Building and Ground zoom together
+            // 3. The Approach: Building zooms in
             // We want to simulate walking INTO the building.
             .to(buildingRef.current, {
                 scale: 18, // Massive zoom to go "through" it
@@ -138,15 +195,7 @@ const Home = () => {
                 duration: 3,
                 ease: "expo.in" // Slow start, fast finish (acceleration)
             }, "<0.2") // Start slightly after text clears
-            .to(groundRef.current, {
-                scale: 12,
-                y: '10%',
-                transformOrigin: "center bottom",
-                filter: 'blur(10px)',
-                opacity: 0,
-                duration: 3,
-                ease: "expo.in"
-            }, "<")
+
             // 4. Background Transition
             .to(introBgRef.current, {
                 scale: 1.5, // Background also zooms a bit
@@ -258,6 +307,17 @@ const Home = () => {
         <div className="home-page-new">
             <div className="scroll-spacer"></div>
 
+            {/* Penthouse Reveal Overlay */}
+            <div className={`penthouse-reveal-overlay ${showPenthouse ? 'active' : ''}`}>
+                <img src={penthouseReveal} alt="Penthouse Reveal" className="penthouse-image" ref={penthouseImageRef} />
+                <div className="penthouse-text-overlay">
+                    <h2 className="penthouse-text left" ref={penthouseTextLeftRef}>AJIDHAS</h2>
+                    <h2 className="penthouse-text right" ref={penthouseTextRightRef}>ASSOCIATES</h2>
+                </div>
+                <img src={openingCloud} alt="Cloud Left" className="penthouse-cloud left" ref={penthouseCloudLeftRef} />
+                <img src={openingCloud} alt="Cloud Right" className="penthouse-cloud right" ref={penthouseCloudRightRef} />
+            </div>
+
             {/* Intro Animation Overlay */}
             <div className="intro-overlay" ref={introRef}>
                 <img src={introBg} alt="Intro Background" className="intro-bg-image" ref={introBgRef} />
@@ -271,7 +331,7 @@ const Home = () => {
                 <img src={openingCloud} alt="Cloud Left" className="intro-cloud left" ref={cloudLeftRef} />
                 <img src={openingCloud} alt="Cloud Right" className="intro-cloud right" ref={cloudRightRef} />
 
-                <img src={openingGround} alt="Ground" className="intro-ground" ref={groundRef} />
+
 
                 <div className="building-container" ref={buildingRef}>
                     <img src={openingBuilding} alt="Building" className="intro-building" />
